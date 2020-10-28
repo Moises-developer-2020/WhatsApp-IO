@@ -1,0 +1,148 @@
+.chat-main{
+  background-color: #FFF;
+  width: 100%;
+  height: 100%;
+  height: 100vh;
+  
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+
+}
+
+.chat-content{
+position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  
+}
+.chat-nav-top{
+  background-color: #FFF;
+  height: 25px;
+  border-bottom: 1px solid grey;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+.info-users-logIn{
+  display: flex;
+  
+  align-items: center;
+  justify-content: center;
+}
+.info-users-logIn span img{
+  width: 25px;
+  margin: 0 5px;
+  border-radius: 60px;
+  background: black;
+}
+.info-users-logIn:active .users-logIn{
+  display: flex;
+}
+.users-logIn:hover{
+  display: flex;
+}
+.users-logIn{
+  position: absolute;
+  background-color: #FFF;
+  min-width: 100px;
+  min-height: 100px;
+  z-index: 1;
+  top:0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.users-logIn button{
+  border: none;
+  border-radius: 38px;
+  
+  
+  padding:  5px;
+  
+font-size: 1.1em;
+  cursor: pointer;
+
+  background-image: linear-gradient(-179deg,#5690FF 0,#387DFF 97%);
+ 
+  box-shadow: 0 3px 16px 0 rgba(56,125,255,.5);
+  color: #FFF;
+
+  outline: none;
+}
+
+.All-content{
+position: absolute;
+overflow: auto;
+  display:flex;
+  width: 100%;
+
+}
+.chat-nav-left{
+
+width:25%;
+background:linear-gradient(180deg, #310046 0%,#500233 100% );
+box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+display: block;
+color: rgb(237, 237, 237);
+z-index: 1;
+}
+
+.chat-content-message{
+  width: 50%;
+  background-color: #f1f2f4;
+
+}
+.message-content{
+  display: block;
+  
+}
+
+.nav-right-message{
+  width: 25%;
+  background-color: #dfdfdf;
+
+}
+
+
+
+
+
+
+
+
+/* Ripple effect */
+.ripple {
+  /*background-position: center;*/
+  transition: background 0.8s;
+}
+.ripple:hover {
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+}
+.ripple:active {
+  background-color: #6eb9f7;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+/* Button style */
+/*button {
+  border: none;
+  border-radius: 38px;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 30px;
+  font-size: 18px;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  background-image: linear-gradient(-179deg,#5690FF 0,#387DFF 97%);
+ 
+  box-shadow: 0 3px 16px 0 rgba(56,125,255,.5);
+  color: #FFF;
+
+  outline: none;
+}*/

@@ -1,0 +1,253 @@
+.nav-left{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgb(237, 237, 237);
+    padding: 5px 0;
+}
+.perfil{
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+.perfil span img{
+    width: 30px;
+    background-color: white;
+    border-radius: 50px;
+    margin: 0 5px;
+}
+.config span{
+    margin: 0 5px;
+}
+
+
+/*active-users*/
+.active-users{
+
+   
+    border-top: 1px  solid #5e0854;
+    border-bottom: 1px  solid #5e0854;
+    max-width: 100%;
+    text-align: center;
+    padding:  8px 0px;
+    overflow-y: hidden;/**/
+    overflow-x: auto;/**/
+    white-space: nowrap;/**/
+    width: auto;/**/
+}
+.active-users a{
+    position: relative;/*este es para que el absolute de abajo se mieva junta a el y no se quede pegado*/
+    display: inline-block;/**/
+    margin:   8px 0;
+    padding: 5px 8px;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+}
+.active-users a .actived{
+    position: absolute;
+    border-radius: 20px;
+    background-color: green;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+    width: 15px;
+    height: 15px;
+    top: 40px;
+    left: 40px;
+    border: 1px solid black;
+
+    
+}
+.active-users a span:nth-child(2){
+    font-size: 0.8em;
+    display: block;
+    overflow: hidden;
+    font-weight: bold;
+    width: 50px;
+    max-width: 50px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    
+}
+.active-users a.linkUsers span img{
+    width: 50px;
+    border-radius: 50px;
+    background-color: black;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+
+}
+
+/*search-users*/
+.search-users{
+    
+    padding: 5px ;
+    margin: 5px 0;
+
+
+    
+}
+.search-users .search{
+    background-color: rgb(255 255 255 / 76%);
+
+    border-radius: 40px;
+    display: flex;
+    
+    padding: 5px;
+    align-items: center;
+    
+}
+.search-users .search img{
+    margin: 0 5px;
+    width: 15px;
+}
+.search-users .search span:nth-child(2){
+    width: 100%;
+}
+.search-users .search input{
+min-width: 100%;
+max-width: 100%;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 5px 0;
+    outline: none;
+    border-radius: 40px;
+}
+
+
+/*content-message-users*/
+.content-message-users{
+   padding: 0 8px;
+   max-height: 100%;
+   position: relative;
+   overflow: auto;
+}
+.users-message-info{
+position: relative;
+display: flex;
+justify-content: space-around;
+cursor: pointer;
+padding: 5px ;
+/*align-items: center;*/
+
+}
+.users-message-infor-left-actived{
+    text-align: center;
+    background-color: green;
+    min-width: 15px;
+    min-height: 15px;
+    border-radius: 40px;
+    position: absolute;
+    top: 36px;
+    left: 40px;
+    border: 1px solid black;
+    font-size: 0.7em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.users-message-info-left img{
+    width: 50px;
+    background-color: black;
+    border-radius: 45px;
+}
+
+.users-message-info-center{
+    max-width: 100%;
+ width: 100%;
+ display: block;
+ margin: 0 5px;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+}
+.users-message-info-center-name{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.users-message-info-center .emit{
+
+    font-weight: bold;
+    color: #000;
+}
+.users-message-info-center-message{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: grey;
+    max-width: 100%;
+    
+}
+
+.users-message-info-right{
+display: block;
+text-align: end;
+width: 100px;
+/*margin: 0 8px ;*/
+}
+.users-message-info-right-date{
+    font-size: 0.8em;
+}
+.info-message-send{
+
+}
+.info-message-send img{
+    width: 20px;
+}
+
+
+/* Ripple effect */
+.ripple {
+    /*background-position: center;*/
+    transition: background 0.8s;
+  }
+  .ripple:hover {
+    background-color: #8404a3;
+
+  }
+  .ripple:active {
+    background-color: #ce5deb;
+    background-size: 50%;
+    transition: background 0.3s;
+  }
+
+
+
+  /*personalizar scroll*/
+.content-message-users::-webkit-scrollbar,
+.active-users::-webkit-scrollbar
+ {
+    width: 8px;     /* Tamaño del scroll en vertical */
+    height: 8px;    /* Tamaño del scroll en horizontal */
+      /* Ocultar scroll */
+}
+/* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+.content-message-users::-webkit-scrollbar-thumb,
+.active-users::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.content-message-users::-webkit-scrollbar-thumb:hover,
+.active-users::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+/* Cambiamos el fondo cuando esté en active */
+.content-message-users::-webkit-scrollbar-thumb:active,
+.active-users::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+}
+/* Ponemos un color de fondo y redondeamos las esquinas del track */
+.content-message-users::-webkit-scrollbar-track,
+.active-users::-webkit-scrollbar-track {
+    background: #e1e1e1;
+    border-radius: 4px;
+}
+/* Cambiamos el fondo cuando esté en active o hover */
+.content-message-users::-webkit-scrollbar-track:hover,
+.content-message-users::-webkit-scrollbar-track:active,
+.active-users::-webkit-scrollbar-track:hover,
+.active-users::-webkit-scrollbar-track:active {
+  background: #d4d4d4;
+}

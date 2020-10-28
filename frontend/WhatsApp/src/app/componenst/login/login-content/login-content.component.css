@@ -1,0 +1,48 @@
+.login-content{
+    background: #0f0c29;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.login{
+    background:linear-gradient(90deg, #fdfbfb 0%,#ebedee 100% );    display: flex;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+.description {
+    min-width:100px;
+    
+}
+.description img{
+    height: 100%;
+    border-radius: 8px 0 0 8px;
+}
+
+
+
+
+.formContent{
+    background-color: #EBEDEE;
+    border-radius: 0  8px 8px 0;
+}
+.routers{
+    margin-top: 10px;
+    
+    
+}
+.routers span{
+    
+    margin: 6px;
+    outline: none;
+}
+.routers span.active{
+    
+    font-weight: bold;
+  
+}

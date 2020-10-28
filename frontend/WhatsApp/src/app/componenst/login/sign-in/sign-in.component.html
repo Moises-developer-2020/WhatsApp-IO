@@ -1,0 +1,63 @@
+<div class="PreviousStart" [class.active]="PreviousStart()" *ngFor="let g of emailDecrypt">
+  
+ 
+  <div class="Previous-Content">
+    <div class="Start-saved">
+      <img src="assets/public/icon/sonreir.svg" alt="img">
+      <span>{{g.email}}</span >
+    </div>
+    <div class="Start-Option">
+      <span class="delete-Start" (click)="deleteSessionPrevious(g._id)"><img src="assets/public/icon/eliminar.png" alt="icon" ></span>
+      <span class="login-Start" (click)="sessionPrevious(g.email)"><img src="assets/public/icon/iniciar-sesion.png" alt="icon" ></span>
+    </div>
+  </div>
+ 
+</div>
+<form #form="ngForm" (ngSubmit)="signIn(form)">
+<div class="content-input">
+  
+  <div class="window">
+    <div >
+      <div class="form-content">
+        <span class="form-input">
+          <input type="text" [ngModel]="email_Receive" name="email" placeholder="Email" />
+        </span>
+        <span class="form-icon">
+          <img src="assets/public/icon/sonreir.svg" alt="icon" />
+        </span>
+      </div>
+      <div class="form-content">
+        <span class="form-input">
+          <input type="password" ngModel name="password" placeholder="Password" />
+        </span>
+        <span class="form-icon">
+          <img src="assets/public/icon/form-candado.svg" alt="icon" />
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="window">
+    <div class="bar-right">
+      <span>Or</span>
+    </div>
+  </div>
+  <div class="window">
+    <div class="others-signIn">
+      <div class="description-text">Also, you can...</div>
+      <div class="more-signIn"></div>
+      <div class="more-signIn"></div>
+      <div class="more-signIn"></div>
+    </div>
+  </div>
+</div>
+<div class="response">
+    <!--this is the response-->
+    <span [class.active]="response_signIn"></span>
+    <span [class.active]="response_signIn"></span>
+    <span [class.active]="response_signIn"></span>
+    {{response_API}}
+</div>
+<div class="signIn-button">
+    <button>Sign In</button>
+</div>
+</form>

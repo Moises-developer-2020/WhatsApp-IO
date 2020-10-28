@@ -1,0 +1,11 @@
+//users
+users={
+    "_id",
+    "name",
+    "email",
+    "password"
+
+}
+
+//credentiales saved
+//los guardo en localStorage encryptado

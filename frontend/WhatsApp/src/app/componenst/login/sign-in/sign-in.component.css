@@ -1,0 +1,200 @@
+.content-input {
+    margin: 20px 10px;
+    display: inline-flex;
+    
+
+}
+.window{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    
+
+}
+.form-content{
+  /* background-color: rgb(175, 199, 199);*/
+    border-bottom: 2px solid #a5a5a5;
+    margin:5px 0;
+}
+.form-content span{
+    display: inline-flex;
+}
+
+.form-input{
+padding: 2px 5px 0 0; 
+/*background-color: rgb(209, 223, 223);*/
+}
+
+.form-input input{
+    border:none;
+    outline: none;
+    padding: 5px 0;
+    background-color: #ecedef;
+}
+.form-icon{
+border-radius: 10px;
+}
+.form-icon img{
+    width: 100%;
+    max-width: 25px;
+}
+
+
+.bar-right{
+    background-color: #a5a5a5;
+    width: 2px;
+    height: 100px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bar-right span{
+    background-color: #ecedef;
+    font-weight: bold;
+    color: rgb(136, 136, 136);
+}
+
+.response{
+    text-align: center;
+    margin: 10px 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(107, 107, 238);
+}
+.response span{
+    
+    width: 15px;
+    margin: 3px;
+    height: 15px;
+    border-radius: 15px;
+    display: inline-block;
+    display: none;
+    background-color: rgb(60, 60, 248);
+    animation: load 0.3s alternate-reverse infinite;
+
+}
+.response span.active{
+    display: inline-block;
+}
+.response span:nth-child(1){
+    animation-delay: 0.1s;
+}
+.response span:nth-child(2){
+    animation-delay: 0.2s;
+}.response span:nth-child(3){
+    animation-delay: 0.3s;
+}
+@keyframes load{
+    0%{
+        transform:scale(0);
+        background-color: #ffff;
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+
+.description-text{}
+.more-signIn{
+    background-color: rgb(60, 60, 248);
+    height: 20px;
+    width: 100%;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+.signIn-button{
+    margin: 8px 0;
+    text-align: center;
+    
+}
+.signIn-button button{
+    border: 1px solid rgb(169, 169, 169);
+    font: 1.2em smaller;
+    outline: none;
+    border-radius: 5px;
+}
+.signIn-button button:hover{
+    background-color: #667eea;
+    color: #ffff;
+    transition: 0.5s;
+}
+.signIn-button button:active{
+    background-color: #764ba2;
+    color: #ffff;
+}
+
+
+
+/*Previsious Start*/
+.PreviousStart{
+    text-align: center;
+    display: none;
+}
+.PreviousStart.active{
+    display: block;
+}
+.Previous-Content{
+    position: relative;
+    display: block;
+    margin: 5px auto 0;
+    max-width: 200px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.083);
+    background-color: rgb(240, 240, 240);
+    border: 2px solid rgb(177, 177, 177);
+}
+.Start-saved{
+    display: flex;
+    align-items: center;
+    font: 1em ;
+    font-family: courier,arial,helvética;
+    font-weight: bold;
+    padding: 5px;
+}
+.Start-saved span{
+    display: block;
+    max-width: 200px;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.Start-saved img{
+    width: 25px;
+    margin: 0 5px;
+}
+.Start-Option{
+background-color: rgb(209, 209, 209);
+position: absolute;
+margin-top:-35px;
+width: 100%;
+height: 100%;
+border-radius: 5px;
+
+align-items: center;
+justify-content:space-around;
+display: none;
+transition: 1s;
+}
+.Previous-Content:hover .Start-Option{
+    display: flex;
+    
+}
+.Start-Option span{
+
+    border-radius: 20px;
+    transition: 0.3s;
+}
+.Start-Option span:hover{
+    background: #48c6ef;
+}
+.Start-Option span img{
+    width: 20px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+/*fin previous Start*/

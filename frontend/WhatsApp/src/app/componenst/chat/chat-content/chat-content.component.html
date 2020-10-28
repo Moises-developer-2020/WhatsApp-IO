@@ -1,0 +1,34 @@
+
+<div class="chat-main">
+    <div class="chat-content">
+
+        <div class="chat-nav-top">
+            <div class="Logo">Logo</div>
+            <div class="info-users-logIn">
+                <div class="users-logIn">
+                    <button class="ripple" (click)="logOut()">Log out</button>
+                </div>
+                <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
+                <span><strong>{{userLogIn.name}}</strong></span>
+                
+            </div>
+        </div>
+        <div class="All-content" id="All-content-id">
+            <div class="chat-nav-left">
+                <app-chat-nav-left></app-chat-nav-left>
+            </div>
+            <div class="chat-content-message">
+                <div class="message-content">
+                   <app-chat-message></app-chat-message>
+                </div>
+            </div>
+            <div class="nav-right-message">
+                <app-chat-nav-right></app-chat-nav-right>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+

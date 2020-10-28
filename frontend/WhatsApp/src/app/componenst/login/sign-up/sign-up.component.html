@@ -1,0 +1,56 @@
+<form #newUser="ngForm" (ngSubmit)="SignUp(newUser)">
+<div class="content-input">
+    <div class="window">
+     <div >
+        <div class="form-content">
+            <span class="form-input">
+              <input type="text" ngModel name="name" placeholder="Name"/>
+            </span>
+            <span class="form-icon">
+              <img src="assets/public/icon/sonreir.svg" alt="icon" />
+            </span>
+          </div>
+        <div class="form-content">
+            
+        <span class="form-input">
+            <input type="text" ngModel name="email" placeholder="Email" />
+          </span>
+          <span class="form-icon">
+            <img src="assets/public/icon/form-email.svg" alt="icon" />
+          </span>
+        </div>
+        <div class="form-content">
+          <span class="form-input">
+            <input type="password" ngModel name="password" placeholder="Password" />
+          </span>
+          <span class="form-icon">
+            <img src="assets/public/icon/form-candado.svg" alt="icon" />
+          </span>
+        </div>
+        <div class="form-content">
+            <span class="form-input">
+              <input type="password" ngModel name="RepeatPassword" placeholder="Repeat password" required/>
+            </span>
+            <span class="form-icon">
+              <img src="assets/public/icon/form-candado.svg" alt="icon" />
+            </span>
+          </div>
+     </div>
+    </div>
+    
+    
+  </div>
+  <div class="response">
+      <!--this is the response-->
+      
+      <span [class.active]="response"></span>
+      <span [class.active]="response"></span>
+      <span [class.active]="response"></span>
+      {{response_API}}
+      
+  </div>
+  <div class="signIn-button">
+      <button >Sign In</button>
+  </div>
+</form>
+  
