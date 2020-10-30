@@ -26,8 +26,8 @@ export class SignInComponent implements OnInit {
 
   //of encript end decrypt
   private emailEncrypt:any=[];
-  emailDecrypt=[]
-  private readonly passUserEncrypJS:String="UserEncryptJS";
+  emailDecrypt=[];
+  private readonly passUserEncrypJS="UserEncryptJS";
 
   constructor(private authService:AuthServiceService, private router:Router) {
     //email receive of the service if register is correct
@@ -111,9 +111,19 @@ export class SignInComponent implements OnInit {
         form.resetForm();
 
         //save token in localStorage
-      
+
+     
+        localStorage.setItem('token',res.token +" "+btoa(Date()));
+        /*var g=JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem('token'),this.passUserEncrypJS).toString(CryptoJS.enc.Utf8));
+        console.log(JSON.parse(CryptoJS.AES.decrypt(localStorage.getItem('token'),this.passUserEncrypJS).toString(CryptoJS.enc.Utf8)).token);
+         */
+        //anterior sin expireIn
+       // localStorage.setItem('token',res.token);    
+       
+       
+       
+       
         
-        localStorage.setItem('token',res.token);
         this.router.navigate(['/chat']);
         
       },

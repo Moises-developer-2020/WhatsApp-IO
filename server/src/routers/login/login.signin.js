@@ -20,7 +20,8 @@ router.post('/signIn',async (req, res)=>{
 
     if(!Matchpassword) res.status(400).json({msm:'Wrong Password'});
 
-    const token=jwt.sign({_id:user._id},'secretKey');
+    //const token=jwt.sign({_id:user._id},'secretKey',{expiresIn:900});//900 15m en s
+    const token=jwt.sign({_id:user._id},'secretKey',{expiresIn:7200});//expira en 2 h
 
     return res.status(200).json({
         _id:user._id,

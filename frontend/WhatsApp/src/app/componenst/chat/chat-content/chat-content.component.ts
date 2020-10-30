@@ -41,7 +41,12 @@ export class ChatContentComponent implements OnInit {
         this.userLogIn=res.sendUser as User;
        // console.log(res.sendUser.name);
         
-      }
+      }, 
+      err=>{
+        console.error(err.error.msm)
+        //muestro una alerta o redirijo a signIn
+        
+      }//add an alert to send me to login as teams 
     )
 
 

@@ -9,3 +9,5 @@ users={
 
 //credentiales saved
 //los guardo en localStorage encryptado
+
+//model for messages

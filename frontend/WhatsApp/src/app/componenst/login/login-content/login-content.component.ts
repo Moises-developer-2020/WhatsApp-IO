@@ -17,8 +17,8 @@ export class LoginContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   
 
+    
     
   }
 
