@@ -11,3 +11,17 @@ users={
 //los guardo en localStorage encryptado
 
 //model for messages
+messages={
+    _id_user:"",
+    name:"",
+    message_user:{
+        _id_user_emisor:"",
+        _id_user_receptor:"",
+        image_user_receptor:"",
+        data:{
+            file:"",
+            messages
+        }
+
+    }
+}

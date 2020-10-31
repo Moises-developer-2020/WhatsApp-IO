@@ -14,6 +14,7 @@ export class LoginContentComponent implements OnInit {
     if(this.auth.loggedIn()){
       this.router.navigate(['/chat']);
     }
+    
   }
 
   ngOnInit(): void {

@@ -5,12 +5,12 @@ const verifyToken= function(req, res, next){
 
    try{
         if(!req.headers.authorization){
-            return res.status(401).send("Unauthorised request");
+            return res.status(401).json({msm:"Unauthorised request"});
         }
         const token=req.headers.authorization.split(' ')[1];
-        //console.log(token);
+       // console.log(token);
         if(token == null){
-            return res.status(401).send("Unauthorised request");
+            return res.status(401).json({msm:"Unauthorised request"});
         }
 
         const payload=jwt.verify(token,'secretKey');
@@ -21,7 +21,7 @@ const verifyToken= function(req, res, next){
 
    }catch(e){
        //console.log(e);
-       return res.status(401).send("Error Unauthorised request");
+       return res.status(401).json({msm:"Unauthorised request"});
 
    }
 }

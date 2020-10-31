@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Alert } from "../../../models/alert";
+
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
@@ -8,6 +10,10 @@ import { Component, OnInit } from '@angular/core';
 export class AlertComponent implements OnInit {
 
 
+  alertInfo={
+    status:false,
+    message:""
+  };
   constructor() { }
 
   ngOnInit(): void {

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 
 import { ChatService } from "../../../services/chat/chat.service";
 import { AuthServiceService } from "../../../services/login/auth-service.service";
 import { User } from "../../../models/user";
 
+import { AlertComponent } from "../../static/alert/alert.component";
 
 @Component({
   selector: 'app-chat-content',
@@ -27,7 +28,8 @@ export class ChatContentComponent implements OnInit {
 
   }
   /**************** */
-
+  @ViewChild(AlertComponent)
+  WindowAlert:AlertComponent
 
   constructor(private chatService:ChatService, private authService:AuthServiceService) {
     
@@ -35,20 +37,6 @@ export class ChatContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.chatService.exampleChat()
-    .subscribe(
-      res=>{
-        this.userLogIn=res.sendUser as User;
-       // console.log(res.sendUser.name);
-        
-      }, 
-      err=>{
-        console.error(err.error.msm)
-        //muestro una alerta o redirijo a signIn
-        
-      }//add an alert to send me to login as teams 
-    )
-
 
     //**********************  SCRIPT DE CONFIGURACION ADAPTACION A DISPOSITIVO  **************************////
 
@@ -143,6 +131,35 @@ export class ChatContentComponent implements OnInit {
     //********************  fin scryp de adaptacion al dispositivo  ******************
 
       
+
+
+
+    //aqui va 
+    if(this.authService.refreshToken()){
+      this.chatService.exampleChat()
+    .subscribe(
+      res=>{
+        this.userLogIn=res.sendUser as User;
+       // console.log(res.sendUser.name);
+       this.WindowAlert.alertInfo.status=false;
+        
+      }, 
+      err=>{
+        console.error(err.error.msm)
+        this.WindowAlert.alertInfo={
+          status:true,
+          message:err.error.msm
+        }
+  
+        //muestro una alerta o redirijo a signIn
+        setTimeout(() => {
+          this.authService.logout();
+        }, 3000);
+
+        
+      }//add an alert to send me to login as teams 
+    )
+    }
   }
 
   logOut(){
