@@ -94,7 +94,7 @@ export class AuthServiceService {
 
     var elapseTime=difference_between_dates(timestampNow, timeDesencrypt);
     console.log(elapseTime);
-    if(elapseTime.date.hours>0 || elapseTime.date.minutes>=1){
+    if(elapseTime.date.hours>0 || elapseTime.date.minutes>=15){
       //console.log("session ha expirado");
       this.logout();
       return false;

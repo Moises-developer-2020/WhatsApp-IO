@@ -37,107 +37,107 @@ export class ChatContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(this.authService.refreshToken()){//si es true la session aun no ha terminado
+      //**********************  SCRIPT DE CONFIGURACION ADAPTACION A DISPOSITIVO  **************************////
 
-    //**********************  SCRIPT DE CONFIGURACION ADAPTACION A DISPOSITIVO  **************************////
+      //console.log( document.getElementById('j').attributes);
+      //console.log( document.body.children[0].children[1].children.namedItem('j').attributes);
+      
+      //para adaptar los div a la ventana del dispositivo
+      //**********************************
 
-    //console.log( document.getElementById('j').attributes);
-    //console.log( document.body.children[0].children[1].children.namedItem('j').attributes);
-    
-    //para adaptar los div a la ventana del dispositivo
-    //**********************************
-
-    var chatMain =document.querySelector('.chat-main');
-    var chatContent =document.querySelector('.chat-content');
-    var Allcontent =document.querySelector('.All-content');
-    
-    function Allcontent_Adaptable(){//adapto .All-content con el tamno del .chat-nav-top 
-      //console.log(chatContent.children);
-      var totalHeightWindow=chatMain.clientHeight-chatContent.children.item(0).clientHeight;
-      console.log(totalHeightWindow);
+      var chatMain =document.querySelector('.chat-main');
+      var chatContent =document.querySelector('.chat-content');
+      var Allcontent =document.querySelector('.All-content');
       
-      chatContent.children.item(1).setAttribute("style","height:"+totalHeightWindow+"px");
+      function Allcontent_Adaptable(){//adapto .All-content con el tamno del .chat-nav-top 
+        //console.log(chatContent.children);
+        var totalHeightWindow=chatMain.clientHeight-chatContent.children.item(0).clientHeight;
+        console.log(totalHeightWindow);
+        
+        chatContent.children.item(1).setAttribute("style","height:"+totalHeightWindow+"px");
+        
+        
+      } 
       
-      
-    } 
-    
-    // console.log(Allcontent.children)
-    function windowAdaptable(){//hijos del #All-content
-      for(var i=0; i<Allcontent.children.length; i++){
-        //console.log(Allcontent.children.item(i));
-        //adapto los hijos al tamano del padre
-        Allcontent.children.item(i).setAttribute("style","height:"+Allcontent.clientHeight+"px");
+      // console.log(Allcontent.children)
+      function windowAdaptable(){//hijos del #All-content
+        for(var i=0; i<Allcontent.children.length; i++){
+          //console.log(Allcontent.children.item(i));
+          //adapto los hijos al tamano del padre
+          Allcontent.children.item(i).setAttribute("style","height:"+Allcontent.clientHeight+"px");
+        }
       }
-    }
 
-    /*adaptar el .content-message-users al tama;o de su padre */
+      /*adaptar el .content-message-users al tama;o de su padre */
 
-    var chatNavLeft=document.querySelector('.chat-nav-left');//div father
+      var chatNavLeft=document.querySelector('.chat-nav-left');//div father
 
-    var navLeft=document.querySelector('.nav-left');
-    var activeUsers=document.querySelector('.active-users');
-    var searchUsers=document.querySelector('.search-users');
-    var contentMessageUsers=document.querySelector('.content-message-users');
+      var navLeft=document.querySelector('.nav-left');
+      var activeUsers=document.querySelector('.active-users');
+      var searchUsers=document.querySelector('.search-users');
+      var contentMessageUsers=document.querySelector('.content-message-users');
 
-    function contentMessageUsersAdaptable(){
-      var ParcialHeight=navLeft.clientHeight + activeUsers.clientHeight + searchUsers.clientHeight;
-      var totalHeight=chatNavLeft.clientHeight - ParcialHeight;
-      contentMessageUsers.setAttribute("style","height:"+(totalHeight-22)+"px");
-    }
-    /*--------------- */
+      function contentMessageUsersAdaptable(){
+        var ParcialHeight=navLeft.clientHeight + activeUsers.clientHeight + searchUsers.clientHeight;
+        var totalHeight=chatNavLeft.clientHeight - ParcialHeight;
+        contentMessageUsers.setAttribute("style","height:"+(totalHeight-22)+"px");
+      }
+      /*--------------- */
 
-    /*Para adaptar .nav-message junto de sus hijos a la altura de .chat-content-message su padre */
-    
-    function showMessagesAdapter(){
-      var chatContentMessage=document.querySelector('.chat-content-message');//padre
-      //hijos
-      var navMessage=document.querySelector('.nav-message');
-      var showMessages=document.querySelector('.show-messages');//El que adaptare para que quede enmedio
-      var sendOptions=document.querySelector('.send-options');
+      /*Para adaptar .nav-message junto de sus hijos a la altura de .chat-content-message su padre */
+      
+      function showMessagesAdapter(){
+        var chatContentMessage=document.querySelector('.chat-content-message');//padre
+        //hijos
+        var navMessage=document.querySelector('.nav-message');
+        var showMessages=document.querySelector('.show-messages');//El que adaptare para que quede enmedio
+        var sendOptions=document.querySelector('.send-options');
 
-      var parcialTotal=chatContentMessage.clientHeight - navMessage.clientHeight - sendOptions.clientHeight;
-      showMessages.setAttribute("style","height:"+(parcialTotal-4)+"px"); 
-    }
+        var parcialTotal=chatContentMessage.clientHeight - navMessage.clientHeight - sendOptions.clientHeight;
+        showMessages.setAttribute("style","height:"+(parcialTotal-4)+"px"); 
+      }
 
-    /*-------------------------------------*/
+      /*-------------------------------------*/
 
-    //para que se ejecuten al darse el evento
-    window.onresize=function(){
-      windowAdaptable();
-      Allcontent_Adaptable();
-      contentMessageUsersAdaptable();
-      showMessagesAdapter();
-    };
-    window.onload=function(){
-      windowAdaptable();
-      Allcontent_Adaptable();
-      contentMessageUsersAdaptable();
-      showMessagesAdapter();
-    }
-    /*document.getElementById('All-content-id').onclick=function(){
+      //para que se ejecuten al darse el evento
+      window.onresize=function(){
+        windowAdaptable();
+        Allcontent_Adaptable();
+        contentMessageUsersAdaptable();
+        showMessagesAdapter();
+      };
+      window.onload=function(){
+        windowAdaptable();
+        Allcontent_Adaptable();
+        contentMessageUsersAdaptable();
+        showMessagesAdapter();
+      }
+      /*document.getElementById('All-content-id').onclick=function(){
+        windowAdaptable;
+        Allcontent_Adaptable;
+        contentMessageUsersAdaptable;
+        console.log('e');
+        
+      } */
+      
+      
+      //para que se ejecuten al iniciar esta pagina
       windowAdaptable;
-      Allcontent_Adaptable;
-      contentMessageUsersAdaptable;
-      console.log('e');
-      
-    } */
-    
-    
-    //para que se ejecuten al iniciar esta pagina
-    windowAdaptable;
-    Allcontent_Adaptable();
-    contentMessageUsersAdaptable();
-    showMessagesAdapter();
-    //*****************************************
-    //********************  fin scryp de adaptacion al dispositivo  ******************
+      Allcontent_Adaptable();
+      contentMessageUsersAdaptable();
+      showMessagesAdapter();
+      //*****************************************
+      //********************  fin scryp de adaptacion al dispositivo  ******************
 
-      
+        
 
 
 
-    //aqui va 
-    if(this.authService.refreshToken()){
+      //aqui va 
+  
       this.chatService.exampleChat()
-    .subscribe(
+      .subscribe(
       res=>{
         this.userLogIn=res.sendUser as User;
        // console.log(res.sendUser.name);
@@ -153,7 +153,7 @@ export class ChatContentComponent implements OnInit {
   
         //muestro una alerta o redirijo a signIn
         setTimeout(() => {
-          this.authService.logout();
+          this.logOut();
         }, 3000);
 
         

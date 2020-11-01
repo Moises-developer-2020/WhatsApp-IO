@@ -26,6 +26,7 @@ import { EncryptComponent } from './componenst/static/encrypt/encrypt.component'
 import { ChatNavRightComponent } from './componenst/chat/chat-nav-right/chat-nav-right.component';
 import { ChatNavTopComponent } from './componenst/chat/chat-nav-top/chat-nav-top.component';
 import { ChatContentComponent } from './componenst/chat/chat-content/chat-content.component';
+import { PageNotFoundComponent } from './componenst/static/page-not-found/page-not-found.component';
 
 
 //router config
@@ -48,6 +49,9 @@ const router:Routes=[
   },
   {
     path:'chat',component:ChatContentComponent,canActivate:[AuthGuard]
+  },
+  {
+    path:'**',component:PageNotFoundComponent
   }
 
 ]
@@ -64,7 +68,8 @@ const router:Routes=[
     EncryptComponent,
     ChatNavRightComponent,
     ChatNavTopComponent,
-    ChatContentComponent
+    ChatContentComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
