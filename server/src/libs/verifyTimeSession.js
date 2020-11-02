@@ -1,7 +1,7 @@
 const Buffer=require('buffer');
-
+const CryptoJS=require('crypto-js');
 const verifyTimeSession=function(req, res, next){
-
+   // console.log(CryptoJS.AES.decrypt("U2FsdGVkX18LZmtxLm8I+ToMdAtu49/9XN173BXQqtw=","MOISES").toString(CryptoJS.enc.Utf8));
     try {
         
         
@@ -41,7 +41,13 @@ const verifyTimeSession=function(req, res, next){
 
         var elapseTime=difference_between_dates(timestampNow, timeDesencrypt);
         console.log(elapseTime);
-        if(elapseTime.date.hours>0 || elapseTime.date.minutes>=15) return res.status(400).json({msm:"session has expired"});
+       // if(elapseTime.date.hours>0 || elapseTime.date.minutes>=15) return res.status(400).json({msm:"session has expired"});
+        if(elapseTime.date.hours>0 || elapseTime.date.minutes>=1 || elapseTime.date.seconds>=5) return res.status(400).json({msm:"session has expired"});
+        /*siempre que envio una peticion desde la pagina original el tiempo siempre viene a 0h 0m 0s porque
+        el tiempo siempre lo refresco cuando hago una peticion siempre y cuando no se haiga expirado sus 15 minutos de inactividad.
+        Si la peticion se realiza desde otra pagina o servicio como postman copiando el token el tiempo guardado ahi se ira contando aqui
+        y no sera 0h 0m 0s sino que se ira acumulando por ende si pasa de 0h 0m 5s es porque la peticion no se realizo desde la pagina original
+         */
         
         next();
     } catch (error) {

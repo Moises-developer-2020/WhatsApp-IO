@@ -2,10 +2,9 @@ const {Router}= require('express');
 const router=Router();
 
 const verifyToken = require('../../libs/verifyToken');
-const verifySession=require('../../libs/verifyTimeSession');
+const verifyTimeSession = require('../../libs/verifyTimeSession');
 
 const User=require('../../models/user');
-const verifyTimeSession = require('../../libs/verifyTimeSession');
 
 router.get('/chat',verifyTimeSession, verifyToken, async(req, res)=>{
     console.log( req.userId );

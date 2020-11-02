@@ -37,7 +37,7 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+   // console.log(CryptoJS.AES.encrypt("HOLA SOY MOISES","MOISES").toString());
     this.dataSave();
     //this.authService.logout();
     
@@ -119,8 +119,7 @@ export class SignInComponent implements OnInit {
          */
         //anterior sin expireIn
        // localStorage.setItem('token',res.token);    
-       
-       
+        
        
        
         

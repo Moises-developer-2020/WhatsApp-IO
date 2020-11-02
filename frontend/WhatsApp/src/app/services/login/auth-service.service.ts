@@ -96,7 +96,9 @@ export class AuthServiceService {
     console.log(elapseTime);
     if(elapseTime.date.hours>0 || elapseTime.date.minutes>=15){
       //console.log("session ha expirado");
+     setTimeout(() => { //3 segundos de retardo para mostrar la alerta de session expirada
       this.logout();
+     }, 3000);
       return false;
     }else{
       

@@ -1,16 +1,21 @@
-//users
-users={
-    "_id",
-    "name",
-    "email",
-    "password"
+const {Schema, model} =require('mongoose');
 
-}
+const MessageSchema= new Schema({
 
-//credentiales saved
-//los guardo en localStorage encryptado
+    _id_user:String,
+    name:String,
+    code_message:Array  
+       
+    
+},{
+    timestamps:true,
+    versionKey:false
+})
 
-//model for messages
+module.exports=model('message',MessageSchema);
+
+
+/*
 messages=[
     {
         _id_user:"",
@@ -53,11 +58,4 @@ messages=[
         ]  
     }
 ]
-
-//configuraciones de cada usuario a su preferencia
-configUsers=
-[
-    {
-
-    }
-]
+*/

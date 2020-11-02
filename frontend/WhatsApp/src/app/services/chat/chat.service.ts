@@ -12,6 +12,6 @@ export class ChatService {
   constructor(private http:HttpClient) { }
 
   exampleChat(){
-    return this.http.get<any>(this.URL_API+'/chat');    
+    return this.http.get<any>(this.URL_API+'/chat');   
   }
 }
