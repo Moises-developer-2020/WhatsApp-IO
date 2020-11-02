@@ -3,7 +3,7 @@ const {Schema, model} =require('mongoose');
 const MessageSchema= new Schema({
 
     _id_user:String,
-    name:String,
+    name:String, 
     code_message:Array  
        
     
