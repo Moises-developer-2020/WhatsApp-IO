@@ -10,6 +10,11 @@ export class ChatNavLeftComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
+  openSearch(key, type:boolean){
+   type?key.classList.add('show'):key.classList.remove('show');
+  }
+  
 }

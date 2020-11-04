@@ -7,6 +7,9 @@
             <div class="info-users-logIn">
                 <div class="users-logIn">
                     <button class="ripple" (click)="logOut()">Log out</button>
+                    <button class="ripple" (click)="OpenCloseWindows({chatNavRight:true})">chatRight</button>
+                    <button class="ripple" (click)="OpenCloseWindows({chatNavLeft:true})">chatLft</button>
+                    <button class="ripple" (click)="OpenCloseWindows({chatMessage:true})">chatMessage</button>
                 </div>
                 <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
                 <span><strong>{{userLogIn.name}}</strong></span>

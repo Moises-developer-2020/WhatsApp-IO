@@ -83,8 +83,9 @@ overflow: auto;
 
 }
 .chat-nav-left{
-
+position: relative;
 width:25%;
+min-height: 100%;
 background:linear-gradient(180deg, #310046 0%,#500233 100% );
 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
 display: block;
@@ -94,6 +95,7 @@ z-index: 1;
 
 .chat-content-message{
   width: 50%;
+  min-height: 100%;
   background-color: #f1f2f4;
 
 }
@@ -104,6 +106,7 @@ z-index: 1;
 
 .nav-right-message{
   width: 25%;
+  min-height: 100%;
   background-color: #dfdfdf;
 
 }
@@ -146,4 +149,25 @@ z-index: 1;
   color: #FFF;
 
   outline: none;
+}*/
+
+
+/*@media screen and (max-width:1120px){
+  .chat-nav-left,
+  .chat-content-message,
+  .nav-right-message{
+    display: none;
+  }
+  .chat-nav-left.show{
+    display: block;
+    z-index: 10;
+  }
+  .chat-content-message.show{
+    display: block;
+    z-index: 10;
+  }
+  .nav-right-message.show{
+    display: block;
+    z-index: 10;
+  }
 }*/

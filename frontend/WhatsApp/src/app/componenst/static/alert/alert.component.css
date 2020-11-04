@@ -8,9 +8,15 @@
     height: 100%;
     z-index: 2000;
     background-color: rgb(0 0 0 / 39%);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
+}
+.alert.show{
+    display: flex;
+}
+.alert:active{
+    display: none;
 }
 .alert-loading{
     text-align: center;

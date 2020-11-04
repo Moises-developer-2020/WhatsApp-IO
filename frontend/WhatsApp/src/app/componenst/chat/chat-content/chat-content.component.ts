@@ -50,7 +50,7 @@ export class ChatContentComponent implements OnInit {
     function Allcontent_Adaptable(){//adapto .All-content con el tamno del .chat-nav-top 
       //console.log(chatContent.children);
       var totalHeightWindow=chatMain.clientHeight-chatContent.children.item(0).clientHeight;
-      console.log(totalHeightWindow);
+     // console.log(totalHeightWindow);
       
       chatContent.children.item(1).setAttribute("style","height:"+totalHeightWindow+"px");
       
@@ -95,21 +95,38 @@ export class ChatContentComponent implements OnInit {
       showMessages.setAttribute("style","height:"+(parcialTotal-4)+"px"); 
     }
 
+    //this belongs to chat-nav-left
+    function searchAdaptable(){
+      var search_User_content=document.querySelector('.search-User-content');
+      var search_User_nav=document.querySelector('.search-User-nav');
+      var totalHeight=search_User_content.clientHeight - search_User_nav.clientHeight;
+      //console.log("t "+search_User_nav.clientHeight);
+      
+      document.querySelector('.search-User-person').setAttribute("style","height:"+totalHeight+"px");
+    }
     /*-------------------------------------*/
-
+    document.getElementById('openSearch').onclick=()=>{
+      searchAdaptable();
+    }
     //para que se ejecuten al darse el evento
     window.onresize=function(){
       windowAdaptable();
       Allcontent_Adaptable();
       contentMessageUsersAdaptable();
       showMessagesAdapter();
+      searchAdaptable();
+
     };
     window.onload=function(){
       windowAdaptable();
       Allcontent_Adaptable();
       contentMessageUsersAdaptable();
       showMessagesAdapter();
+      searchAdaptable();
+      
+
     }
+    
     /*document.getElementById('All-content-id').onclick=function(){
       windowAdaptable;
       Allcontent_Adaptable;
@@ -160,6 +177,7 @@ export class ChatContentComponent implements OnInit {
       }, 1000);
     }
 
+    ///console.log("hi");
     
 
   }
@@ -185,4 +203,21 @@ export class ChatContentComponent implements OnInit {
     }
   }*/
 
+  //para manejar la vista de las ventans en tama;o celular
+  OpenCloseWindows({
+    chatNavLeft=false,
+    chatNavLeftSearchUsers=false,
+    chatNavRight=false,
+    chatMessage=false
+  }){
+    const chat_nav_left= document.querySelector('.chat-nav-left');
+    const chat_content_message= document.querySelector('.chat-content-message');
+    const nav_right_message= document.querySelector('.nav-right-message');
+    
+    chatNavLeft?chat_nav_left.classList.add('show'):chat_nav_left.classList.remove('show');
+    chatNavRight?nav_right_message.classList.add('show'):nav_right_message.classList.remove('show');
+    chatMessage?chat_content_message.classList.add('show'):chat_content_message.classList.remove('show');
+    
+    this.ngOnInit();//para que se ejecute la adaptacion
+  }
 }

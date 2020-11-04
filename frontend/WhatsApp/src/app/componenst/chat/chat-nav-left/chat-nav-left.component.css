@@ -1,3 +1,79 @@
+.search-User-content{
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    min-height: 100%;
+    max-height: 100%;
+    background-color: rgb(45 0 53);
+    z-index: 5;
+    display: none;
+   
+
+}
+.search-User-content.show{
+    display: block;
+    animation:show 0.3s 1 linear;
+}
+
+@keyframes show{
+    0%{
+        animation-timing-function: cubic-bezier(0.2242,0.7499,0.3142,0.8148);
+    transform: translate(-14.925%,0);
+    opacity: .005;
+    }
+    100%{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+}
+
+.search-User-nav{
+    padding: 10px 2px;
+    display: flex;
+    height: 29px;
+    align-items: center;
+}
+.search-User-nav span{
+    margin: 0 5px;
+}
+.search-User-nav span:nth-child(2){
+width: 90%;
+}
+.search-User-nav span img{
+    height: 25px;
+}
+.search-User-nav span input{
+    border:none;
+    outline: none;
+    background: transparent;
+    color: white;
+}
+.search-User-person{
+    overflow: auto; 
+    min-height: 100%;
+     
+}
+.search-User-person .person{
+    padding:3px 5px ; 
+    display: flex;
+    align-items: center;
+}
+
+.search-User-person .person span:nth-child(2){
+    margin: 0 5px;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+
+.search-User-person .person span img{
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    border-radius: 40px;
+    box-shadow: rgba(0, 0, 0, 0.2);
+}
+
 .nav-left{
     display: flex;
     justify-content: space-between;
@@ -49,9 +125,9 @@
     border-radius: 20px;
     background-color: green;
     box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-    width: 15px;
-    height: 15px;
-    top: 40px;
+    width: 11px;
+    height: 11px;
+    top: 41px;
     left: 40px;
     border: 1px solid black;
 
@@ -133,11 +209,11 @@ padding: 5px ;
 .users-message-infor-left-actived{
     text-align: center;
     background-color: green;
-    min-width: 15px;
-    min-height: 15px;
+    min-width: 11px;
+    min-height: 11px;
     border-radius: 40px;
     position: absolute;
-    top: 36px;
+    top: 41px;
     left: 40px;
     border: 1px solid black;
     font-size: 0.7em;
