@@ -1,41 +1,15 @@
 <div #search class="search-User-content">
     <div class="search-User-nav">
         <span (click)="openSearch(search, false)"><img  src="assets/public/icon/OptionBack.png" alt="icon"></span>
-        <span><input type="text" placeholder="Search"></span>
+        <span><input type="text" placeholder="Search" #name (keyup)="SearchUsers($event)"></span>
     </div>
-    <div class="search-User-person" >
-        <div class="person ripple">
+    <div class="search-User-person" *ngFor="let users of AllUserSearch" >
+        
+        <div class="person ripple" (click)="UserSelected(users._id)">
             <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
+            <span>{{users.name}}</span>
         </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
-        <div class="person ripple">
-            <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-            <span>Jose Moises</span>
-        </div>
+        
     </div>
 </div>
 <div class="nav-left">
@@ -396,3 +370,4 @@
         </div>
     </div>
 </div>
+<app-alert></app-alert>

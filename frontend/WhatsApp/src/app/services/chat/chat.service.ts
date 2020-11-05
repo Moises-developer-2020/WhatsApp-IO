@@ -14,4 +14,11 @@ export class ChatService {
   exampleChat(){
     return this.http.get<any>(this.URL_API+'/chat');   
   }
+
+  getAllUsersInSearch(){
+    return this.http.get<any>(this.URL_API+'/searchUsers');
+  }
+  SearchUsers(name){
+    return this.http.get<any>(this.URL_API+`/searchUsers/${name}`);
+  }
 }

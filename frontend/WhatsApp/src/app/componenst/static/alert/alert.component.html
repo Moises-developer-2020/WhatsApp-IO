@@ -1,4 +1,4 @@
-<div class="alert" [class.show]="alertInfo.status"><!--alertInfo-->
+<div class="alert" [class.show]="alertInfo.status" (click)="alertInfo.status=false"><!--alertInfo-->
     <div class="alert-loading">
 
         <div class="swal2-icon swal2-success swal2-icon-show" *ngIf="alertInfo.sucessfully">

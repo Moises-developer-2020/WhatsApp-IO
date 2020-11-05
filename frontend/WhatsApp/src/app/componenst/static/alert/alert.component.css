@@ -15,9 +15,7 @@
 .alert.show{
     display: flex;
 }
-.alert:active{
-    display: none;
-}
+
 .alert-loading{
     text-align: center;
     background-color: #FFF;

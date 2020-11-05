@@ -13,11 +13,13 @@ app.set('port', process.env.PORT || 3000);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors({origin:'http://localhost:4200'}));
+
 //router
 app.use('/api',require('./routers/login/login.signup'));
 app.use('/api',require('./routers/login/login.signin'));
 
 app.use('/api',require('./routers/chat/chat.chat'));
+app.use('/api',require('./routers/search/search.users'));
 
 //Server
 app.listen(app.get('port'),()=>{
