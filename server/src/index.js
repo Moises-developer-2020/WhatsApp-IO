@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors =require('cors');
+const socket=require('./socketIO');
 
 //initialitation
 const app= express();
@@ -22,6 +23,10 @@ app.use('/api',require('./routers/chat/chat.chat'));
 app.use('/api',require('./routers/search/search.users'));
 
 //Server
-app.listen(app.get('port'),()=>{
+const server=app.listen(app.get('port'),()=>{
     console.log('Server on port ', app.get('port'));
 });
+
+//init socketIO
+socket.init(server);
+

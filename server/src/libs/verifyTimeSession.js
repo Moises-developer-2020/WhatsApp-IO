@@ -40,7 +40,7 @@ const verifyTimeSession=function(req, res, next){
         }
 
         var elapseTime=difference_between_dates(timestampNow, timeDesencrypt);
-        console.log(elapseTime);
+        //console.log(elapseTime);
        // if(elapseTime.date.hours>0 || elapseTime.date.minutes>=15) return res.status(400).json({msm:"session has expired"});
         if(elapseTime.date.hours>0 || elapseTime.date.minutes>=1 || elapseTime.date.seconds>=5) return res.status(400).json({msm:"session has expired"});
         /*siempre que envio una peticion desde la pagina original el tiempo siempre viene a 0h 0m 0s porque

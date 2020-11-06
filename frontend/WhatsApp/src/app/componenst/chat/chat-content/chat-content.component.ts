@@ -5,6 +5,7 @@ import { AuthServiceService } from "../../../services/login/auth-service.service
 import { User } from "../../../models/user";
 
 import { AlertComponent } from "../../static/alert/alert.component";
+import {WebSocketService  } from "../../../services/SocketIO/Web-Socket.service";
 
 @Component({
   selector: 'app-chat-content',
@@ -31,7 +32,7 @@ export class ChatContentComponent implements OnInit {
   @ViewChild(AlertComponent)
   WindowAlert:AlertComponent
 
-  constructor(private chatService:ChatService, private authService:AuthServiceService) {}
+  constructor(private chatService:ChatService, private authService:AuthServiceService, private SocketIOService:WebSocketService) {}
 
   ngOnInit(): void {
   
@@ -42,123 +43,121 @@ export class ChatContentComponent implements OnInit {
     
     //para adaptar los div a la ventana del dispositivo
     //**********************************
-
-    var chatMain =document.querySelector('.chat-main');
-    var chatContent =document.querySelector('.chat-content');
-    var Allcontent =document.querySelector('.All-content');
+    //if(location.pathname.indexOf('/chat') != -1){
     
-    function Allcontent_Adaptable(){//adapto .All-content con el tamno del .chat-nav-top 
-      //console.log(chatContent.children);
-      var totalHeightWindow=chatMain.clientHeight-chatContent.children.item(0).clientHeight;
-     // console.log(totalHeightWindow);
+      var chatMain =document.querySelector('.chat-main');
+      var chatContent =document.querySelector('.chat-content');
+      var Allcontent =document.querySelector('.All-content');
       
-      chatContent.children.item(1).setAttribute("style","height:"+totalHeightWindow+"px");
+      function Allcontent_Adaptable(){//adapto .All-content con el tamno del .chat-nav-top 
+        //console.log(chatContent.children);
+        var totalHeightWindow=chatMain.clientHeight-chatContent.children.item(0).clientHeight;
+      // console.log(totalHeightWindow);
+        
+        chatContent.children.item(1).setAttribute("style","height:"+totalHeightWindow+"px");
+        
+        
+      } 
       
-      
-    } 
-    
-    // console.log(Allcontent.children)
-    function windowAdaptable(){//hijos del #All-content
-      for(var i=0; i<Allcontent.children.length; i++){
-        //console.log(Allcontent.children.item(i));
-        //adapto los hijos al tamano del padre
-        Allcontent.children.item(i).setAttribute("style","height:"+Allcontent.clientHeight+"px");
+      // console.log(Allcontent.children)
+      function windowAdaptable(){//hijos del #All-content
+        for(var i=0; i<Allcontent.children.length; i++){
+          //console.log(Allcontent.children.item(i));
+          //adapto los hijos al tamano del padre
+          Allcontent.children.item(i).setAttribute("style","height:"+Allcontent.clientHeight+"px");
+        }
       }
-    }
 
-    /*adaptar el .content-message-users al tama;o de su padre */
+      /*adaptar el .content-message-users al tama;o de su padre */
 
-    var chatNavLeft=document.querySelector('.chat-nav-left');//div father
+      var chatNavLeft=document.querySelector('.chat-nav-left');//div father
 
-    var navLeft=document.querySelector('.nav-left');
-    var activeUsers=document.querySelector('.active-users');
-    var searchUsers=document.querySelector('.search-users');
-    var contentMessageUsers=document.querySelector('.content-message-users');
+      var navLeft=document.querySelector('.nav-left');
+      var activeUsers=document.querySelector('.active-users');
+      var searchUsers=document.querySelector('.search-users');
+      var contentMessageUsers=document.querySelector('.content-message-users');
 
-    function contentMessageUsersAdaptable(){
-      var ParcialHeight=navLeft.clientHeight + activeUsers.clientHeight + searchUsers.clientHeight;
-      var totalHeight=chatNavLeft.clientHeight - ParcialHeight;
-      contentMessageUsers.setAttribute("style","height:"+(totalHeight-22)+"px");
-    }
-    /*--------------- */
+      function contentMessageUsersAdaptable(){
+        var ParcialHeight=navLeft.clientHeight + activeUsers.clientHeight + searchUsers.clientHeight;
+        var totalHeight=chatNavLeft.clientHeight - ParcialHeight;
+        contentMessageUsers.setAttribute("style","height:"+(totalHeight-22)+"px");
+      }
+      /*--------------- */
 
-    /*Para adaptar .nav-message junto de sus hijos a la altura de .chat-content-message su padre */
-    
-    function showMessagesAdapter(){
-      var chatContentMessage=document.querySelector('.chat-content-message');//padre
-      //hijos
-      var navMessage=document.querySelector('.nav-message');
-      var showMessages=document.querySelector('.show-messages');//El que adaptare para que quede enmedio
-      var sendOptions=document.querySelector('.send-options');
-
-      var parcialTotal=chatContentMessage.clientHeight - navMessage.clientHeight - sendOptions.clientHeight;
-      showMessages.setAttribute("style","height:"+(parcialTotal-4)+"px"); 
-    }
-
-    //this belongs to chat-nav-left
-    function searchAdaptable(){
-      var search_User_content=document.querySelector('.search-User-content');
-      var search_User_nav=document.querySelector('.search-User-nav');
-      var totalHeight=search_User_content.clientHeight - search_User_nav.clientHeight;
-      //console.log("t "+search_User_nav.clientHeight);
+      /*Para adaptar .nav-message junto de sus hijos a la altura de .chat-content-message su padre */
       
-      document.querySelector('.search-User-person').setAttribute("style","height:"+totalHeight+"px");
-    }
-    /*-------------------------------------*/
-    document.getElementById('openSearch').onclick=()=>{
-      searchAdaptable();
-    }
-    //para que se ejecuten al darse el evento
-    window.onresize=function(){
-      windowAdaptable();
-      Allcontent_Adaptable();
-      contentMessageUsersAdaptable();
-      showMessagesAdapter();
-      searchAdaptable();
+      function showMessagesAdapter(){
+        var chatContentMessage=document.querySelector('.chat-content-message');//padre
+        //hijos
+        var navMessage=document.querySelector('.nav-message');
+        var showMessages=document.querySelector('.show-messages');//El que adaptare para que quede enmedio
+        var sendOptions=document.querySelector('.send-options');
 
-    };
-    window.onload=function(){
-      windowAdaptable();
-      Allcontent_Adaptable();
-      contentMessageUsersAdaptable();
-      showMessagesAdapter();
-      searchAdaptable();
-      
+        var parcialTotal=chatContentMessage.clientHeight - navMessage.clientHeight - sendOptions.clientHeight;
+        showMessages.setAttribute("style","height:"+(parcialTotal-4)+"px"); 
+      }
 
-    }
-    
-    /*document.getElementById('All-content-id').onclick=function(){
-      windowAdaptable;
-      Allcontent_Adaptable;
-      contentMessageUsersAdaptable;
-      console.log('e');
-      
-    } */
-    
-    
-    //para que se ejecuten al iniciar esta pagina
-    windowAdaptable;
-    Allcontent_Adaptable();
-    contentMessageUsersAdaptable();
-    showMessagesAdapter();
-    //*****************************************
-    //********************  fin scrypt de adaptacion al dispositivo  ******************
+      //this belongs to chat-nav-left
+      function searchAdaptable(){
+        var search_User_content=document.querySelector('.search-User-content');
+        var search_User_nav=document.querySelector('.search-User-nav');
+        var totalHeight=search_User_content.clientHeight - search_User_nav.clientHeight;
+        //console.log("t "+search_User_nav.clientHeight);
+        
+        document.querySelector('.search-User-person').setAttribute("style","height:"+totalHeight+"px");
+      }
+      /*-------------------------------------*/
+      document.getElementById('openSearch').onclick=()=>{
+        searchAdaptable();
+      }
+      //para que se ejecuten al darse el evento
+      window.onresize=function(){
+        windowAdaptable();
+        Allcontent_Adaptable();
+        contentMessageUsersAdaptable();
+        showMessagesAdapter();
+        searchAdaptable();
 
+      };
+      window.onload=function(){
+        windowAdaptable();
+        Allcontent_Adaptable();
+        contentMessageUsersAdaptable();
+        showMessagesAdapter();
+        searchAdaptable();
         
 
-  
+      }
+      
+      /*document.getElementById('All-content-id').onclick=function(){
+        windowAdaptable;
+        Allcontent_Adaptable;
+        contentMessageUsersAdaptable;
+        console.log('e');
+        
+      } */
+      
+      
+      //para que se ejecuten al iniciar esta pagina
+      windowAdaptable;
+      Allcontent_Adaptable();
+      contentMessageUsersAdaptable();
+      showMessagesAdapter();
+      //*****************************************
+      //********************  fin scrypt de adaptacion al dispositivo  ******************
+
+    //}      
+
     if(this.authService.refreshToken()){
-      this.chatService.exampleChat()
+      this.chatService.MyData()
       .subscribe(
         res=>{
           this.userLogIn=res.sendUser as User;
-          // console.log(res.sendUser.name);
           this.WindowAlert.AlertInfo({status:false});
           
         }, 
         err=>{
           //muestro una alerta y redirijo a signIn
-          console.error(err.error.msm)
           this.WindowAlert.AlertInfo({
             status:true,
             error:true,
@@ -175,33 +174,12 @@ export class ChatContentComponent implements OnInit {
           message:"Session Expirada"
         });
       }, 1000);
-    }
-
-    ///console.log("hi");
-    
-
+    };
   }
-
-  logOut(){
+  
+  logOut(){//cerrar session
     this.authService.logout();
   }
-
-  /*example(){
-    this.WindowAlert.AlertInfo({
-        status:true,
-        error:true,
-        message:"Session Expirada"
-      });
-    if(this.authService.refreshToken()){
-      this.chatService.exampleChat().subscribe(res=>console.log(res));
-    }else{
-      this.WindowAlert.AlertInfo({
-        status:true,
-        error:true,
-        message:"Session Expirada"
-      });
-    }
-  }*/
 
   //para manejar la vista de las ventans en tama;o celular
   OpenCloseWindows({

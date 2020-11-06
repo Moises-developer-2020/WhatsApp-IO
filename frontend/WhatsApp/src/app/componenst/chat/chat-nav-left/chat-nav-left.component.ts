@@ -42,7 +42,7 @@ export class ChatNavLeftComponent implements OnInit {
             this.WindowAlert.AlertInfo({
               status:true,
               error:true,
-              message:"Error al optener usuarios"
+              message:"Error getting users"
             });
             }
         );
@@ -51,7 +51,7 @@ export class ChatNavLeftComponent implements OnInit {
         this.WindowAlert.AlertInfo({
           status:true,
           error:true,
-          message:"Expired Session"
+          message:"Session has expired"
           });
       }
     }
@@ -59,7 +59,7 @@ export class ChatNavLeftComponent implements OnInit {
 
   SearchUsers(name){
     
-    if(this.authService.refreshToken() ){
+    if(this.authService.refreshToken()){
       this.chatService.SearchUsers(name.target.value)
       .subscribe(
         res=>{

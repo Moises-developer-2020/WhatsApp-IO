@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat-nav-right.component.css']
 })
 export class ChatNavRightComponent implements OnInit {
-
-  constructor() { }
+  constructor() { 
+    
+  }
 
   ngOnInit(): void {
+
+    
   }
 
 }

@@ -16,7 +16,7 @@ router.get('/searchUsers',verifyTimeSession, verifyToken,async (req, res)=>{
 router.get('/searchUsers/:name?',verifyTimeSession, verifyToken,async (req, res)=>{
     const name=req.params.name;
     
-    const users=await User.find({name:new RegExp([name],"i")})
+    const users=await User.find({name:new RegExp([name],"i")})// buscar usuarios con como like de sql
     
     res.json({users})
 

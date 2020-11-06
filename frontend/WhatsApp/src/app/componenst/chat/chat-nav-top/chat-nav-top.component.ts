@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat-nav-top.component.css']
 })
 export class ChatNavTopComponent implements OnInit {
-
+  
   constructor() { }
 
   ngOnInit(): void {
