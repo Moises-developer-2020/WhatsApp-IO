@@ -4,6 +4,7 @@ import { ChatService } from "../../../services/chat/chat.service";
 import { AuthServiceService } from "../../../services/login/auth-service.service";
 
 import {AlertComponent} from "../../static/alert/alert.component";
+import { WebSocketService } from "../../../services/SocketIO/Web-Socket.service";
 
 @Component({
   selector: 'app-chat-nav-left',
@@ -19,15 +20,17 @@ export class ChatNavLeftComponent implements OnInit {
   AllUserSearch=[{
     _id:"",
     name
-  }]
+  }];
 
-  constructor(private chatService:ChatService, private authService:AuthServiceService) { }
+  MyID;//my id receive from getAllUsersInSearch()
+
+  constructor(private chatService:ChatService, private authService:AuthServiceService, private webSocketService:WebSocketService) { }
 
   ngOnInit(): void {
     
   }
 
-  openSearch(key, type:boolean){
+  openSearch(key, type:boolean){ //show hidden div the search-User-content
     type?key.classList.add('show'):key.classList.remove('show');
 
     if(type){
@@ -35,8 +38,10 @@ export class ChatNavLeftComponent implements OnInit {
         this.chatService.getAllUsersInSearch()
         .subscribe(
             res=>{
-            this.AllUserSearch=res.users
-  
+            this.AllUserSearch=res.users;
+            this.MyID=res.MyID;
+            
+              
             },error=>{
             //console.log(error);
             this.WindowAlert.AlertInfo({
@@ -75,7 +80,11 @@ export class ChatNavLeftComponent implements OnInit {
   };
 
   UserSelected(id){
-    console.log(id);
+    var data={
+      MyID:this.MyID, 
+      id
+    }
+    this.webSocketService.emit('user-selected',data);
     
   }
 }

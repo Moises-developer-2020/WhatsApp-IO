@@ -1,7 +1,9 @@
 .nav-message{
-    padding: 5px ;
+    padding: 5px;
+    height: 35px;
     border-bottom: 1px solid #cbcbcc;
     display: flex;
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 8%);
     align-items: center;
     justify-content: space-between;
 }
@@ -22,8 +24,9 @@
     font-weight: bold;
 }
 .usersReceptor span img{
-    width: 40px;
+    width: 36px;
     background-color: black;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     border-radius: 50px;
 }
 

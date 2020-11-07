@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
+import { WebSocketService } from "../../services/SocketIO/Web-Socket.service";
 
 
 @Injectable({
@@ -14,7 +15,7 @@ export class AuthServiceService {
   signIn_Email:String;//esto es si el registro fue exitoso lleno el input del sigIn
 
   private readonly URL_API="http://localhost:3000/api";
-  constructor(private http:HttpClient, private router:Router) { 
+  constructor(private http:HttpClient, private router:Router, private webSocketService:WebSocketService) { 
     
   }
 
@@ -51,6 +52,7 @@ export class AuthServiceService {
 
   //para eliminar el token
   logout(){
+    this.webSocketService.disconect();
     localStorage.removeItem('token');
     this.router.navigate(['/login/signIn']);
   }
@@ -94,7 +96,7 @@ export class AuthServiceService {
 
     var elapseTime=difference_between_dates(timestampNow, timeDesencrypt);
     console.log(elapseTime);
-    if(elapseTime.date.hours>0 || elapseTime.date.minutes>=15){
+    if(elapseTime.date.hours>0 || elapseTime.date.minutes>=30){
       //console.log("session ha expirado");
      setTimeout(() => { //3 segundos de retardo para mostrar la alerta de session expirada
       this.logout();

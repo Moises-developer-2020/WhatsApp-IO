@@ -32,7 +32,7 @@ export class ChatContentComponent implements OnInit {
   @ViewChild(AlertComponent)
   WindowAlert:AlertComponent
 
-  constructor(private chatService:ChatService, private authService:AuthServiceService, private SocketIOService:WebSocketService) {}
+  constructor(private chatService:ChatService, private authService:AuthServiceService, private webSocketService:WebSocketService) {}
 
   ngOnInit(): void {
   
@@ -154,7 +154,9 @@ export class ChatContentComponent implements OnInit {
         res=>{
           this.userLogIn=res.sendUser as User;
           this.WindowAlert.AlertInfo({status:false});
-          
+
+          this.webSocketService.connect();//conected in case i disconnected
+          this.webSocketService.emit('userConeccted',this.userLogIn);//envio el id del usuario conectado al socket
         }, 
         err=>{
           //muestro una alerta y redirijo a signIn
@@ -166,6 +168,7 @@ export class ChatContentComponent implements OnInit {
          
         }//add an alert to send me to login as teams 
       )
+      
     }else{
       setTimeout(() => {//no lo carga al iniciar por eso despues de 1s
         this.WindowAlert.AlertInfo({

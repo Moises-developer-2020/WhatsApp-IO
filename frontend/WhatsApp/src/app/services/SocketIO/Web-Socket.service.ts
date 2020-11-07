@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-
-import { HttpClient } from "@angular/common/http";
 import * as io from "socket.io-client";
 import { Observable, Subscriber } from 'rxjs';
 
@@ -13,7 +11,7 @@ export class WebSocketService {
 
     private readonly Server="http://localhost:3000";
 
-    constructor(private http:HttpClient) {
+    constructor() {
         this.socket=io(this.Server);
     }
 
@@ -27,7 +25,16 @@ export class WebSocketService {
     };
 
     //emit messages
-    emit(eventName:String, data:any){
+    emit(eventName:String, data){
         this.socket.emit(eventName, data);
+        
     };
+
+    disconect(){//once disconnected it not longer sends request
+        this.socket.disconnect();
+    }
+    connect(){
+        this.socket.connect();
+    }
+    
 }

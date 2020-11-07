@@ -42,6 +42,7 @@ width: 90%;
 .search-User-nav span img{
     height: 25px;
 }
+
 .search-User-nav span input{
     border:none;
     outline: none;
@@ -94,6 +95,17 @@ text-overflow: ellipsis;
 }
 .config span{
     margin: 0 5px;
+}
+.config span svg,
+.config span img{
+    width:28px;
+    height:28px;
+    transition: 0.3s;
+}
+.config span svg:hover{
+    fill: blue;
+    cursor: pointer;
+    transform: scale(1.1);
 }
 
 
@@ -192,7 +204,7 @@ max-width: 100%;
 
 /*content-message-users*/
 .content-message-users{
-   padding: 0 8px;
+   padding: 0 1px;
    max-height: 100%;
    position: relative;
    overflow: auto;

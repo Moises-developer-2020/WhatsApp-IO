@@ -18,17 +18,22 @@ position: fixed;
   
 }
 .chat-nav-top{
-  background-color: #FFF;
+  background: linear-gradient(90deg, #350144 0%,#77046e 110% );
   height: 25px;
-  border-bottom: 1px solid grey;
+  border-bottom: 1px solid #5e0854;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px;
 }
+.chat-nav-top .Logo img{
+  width: 30px;
+  margin-top: 5px;
+  border-radius: 50px;
+}
 .info-users-logIn{
   display: flex;
-  
+  color: white;
   align-items: center;
   justify-content: center;
 }
@@ -37,6 +42,7 @@ position: fixed;
   margin: 0 5px;
   border-radius: 60px;
   background: black;
+  box-shadow: rgba(0,0,0,0.2);
 }
 .info-users-logIn:active .users-logIn{
   display: flex;
@@ -53,9 +59,11 @@ position: fixed;
   top:0;
   right: 0;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 5px;
   display: none;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 }
 .users-logIn button{
   border: none;
@@ -84,7 +92,7 @@ overflow: auto;
 }
 .chat-nav-left{
 position: relative;
-width:25%;
+width: 285px;
 min-height: 100%;
 background:linear-gradient(180deg, #310046 0%,#500233 100% );
 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
