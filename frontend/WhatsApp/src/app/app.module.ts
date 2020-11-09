@@ -51,6 +51,12 @@ const router:Routes=[
     path:'chat',component:ChatContentComponent,canActivate:[AuthGuard]
   },
   {
+    path:'chat/:user',component:ChatContentComponent,canActivate:[AuthGuard]
+  },
+  {
+    path:'chat/:user/:emit',component:ChatContentComponent,canActivate:[AuthGuard]
+  },
+  {
     path:'**',component:PageNotFoundComponent
   }
 

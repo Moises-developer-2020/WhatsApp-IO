@@ -5,6 +5,7 @@ import { AuthServiceService } from "../../../services/login/auth-service.service
 
 import {AlertComponent} from "../../static/alert/alert.component";
 import { WebSocketService } from "../../../services/SocketIO/Web-Socket.service";
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-chat-nav-left',
@@ -15,6 +16,7 @@ export class ChatNavLeftComponent implements OnInit {
 
   @ViewChild(AlertComponent)
   WindowAlert:AlertComponent
+  private readonly passUserEncrypJS="Message";
 
   //All users in the section Search
   AllUserSearch=[{
@@ -24,10 +26,17 @@ export class ChatNavLeftComponent implements OnInit {
 
   MyID;//my id receive from getAllUsersInSearch()
 
-  constructor(private chatService:ChatService, private authService:AuthServiceService, private webSocketService:WebSocketService) { }
+  constructor(
+    private chatService:ChatService,
+    private authService:AuthServiceService,
+    private webSocketService:WebSocketService) { }
 
   ngOnInit(): void {
-    
+    this.webSocketService.listen('messages-user-selected')
+    .subscribe(res=>{
+      console.log(res);
+      
+    });
   }
 
   openSearch(key, type:boolean){ //show hidden div the search-User-content
@@ -79,12 +88,13 @@ export class ChatNavLeftComponent implements OnInit {
     }
   };
 
-  UserSelected(id){
+  UserSelected(user:any){
     var data={
       MyID:this.MyID, 
-      id
+      id:user.id//of the selected user
     }
     this.webSocketService.emit('user-selected',data);
-    
+    history.pushState('','','/chat/'+user.name+'/'+user.id);
   }
+  
 }

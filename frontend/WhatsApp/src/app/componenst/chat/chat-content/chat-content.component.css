@@ -18,6 +18,9 @@ position: fixed;
   
 }
 .chat-nav-top{
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 0.2);
   background: linear-gradient(90deg, #350144 0%,#77046e 110% );
   height: 25px;
   border-bottom: 1px solid #5e0854;
@@ -88,6 +91,7 @@ position: absolute;
 overflow: auto;
   display:flex;
   width: 100%;
+  max-height: calc(100% - 35px);
 
 }
 .chat-nav-left{

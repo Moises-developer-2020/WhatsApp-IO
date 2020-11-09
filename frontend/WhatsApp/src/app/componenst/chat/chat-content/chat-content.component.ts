@@ -32,10 +32,12 @@ export class ChatContentComponent implements OnInit {
   @ViewChild(AlertComponent)
   WindowAlert:AlertComponent
 
-  constructor(private chatService:ChatService, private authService:AuthServiceService, private webSocketService:WebSocketService) {}
+  constructor(private chatService:ChatService, private authService:AuthServiceService, private webSocketService:WebSocketService) {
+    this.MyData();
+  }
 
   ngOnInit(): void {
-  
+   // history.replaceState('moises',location.pathname,'/chat/4/5');
     //**********************  SCRIPT DE CONFIGURACION ADAPTACION A DISPOSITIVO  **************************////
 
     //console.log( document.getElementById('j').attributes);
@@ -148,13 +150,16 @@ export class ChatContentComponent implements OnInit {
 
     //}      
 
+    
+  }
+  MyData(){
     if(this.authService.refreshToken()){
       this.chatService.MyData()
       .subscribe(
         res=>{
           this.userLogIn=res.sendUser as User;
           this.WindowAlert.AlertInfo({status:false});
-
+          //history.replaceState('moises',location.pathname,'/chat/'+res.sendUser.name);
           this.webSocketService.connect();//conected in case i disconnected
           this.webSocketService.emit('userConeccted',this.userLogIn);//envio el id del usuario conectado al socket
         }, 
@@ -179,6 +184,7 @@ export class ChatContentComponent implements OnInit {
       }, 1000);
     };
   }
+
   
   logOut(){//cerrar session
     this.authService.logout();

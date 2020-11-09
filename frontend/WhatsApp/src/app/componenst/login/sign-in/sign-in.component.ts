@@ -123,7 +123,8 @@ export class SignInComponent implements OnInit {
        
        
         
-        this.router.navigate(['/chat']);
+        //this.router.navigate(['/chat','moi','moi?view=123']);
+        this.router.navigate(['/chat',res.name]);
         
       },
       err=>{

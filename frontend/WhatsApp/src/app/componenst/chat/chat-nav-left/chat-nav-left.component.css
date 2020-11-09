@@ -81,6 +81,8 @@ text-overflow: ellipsis;
     align-items: center;
     color: rgb(237, 237, 237);
     padding: 5px 0;
+    border-bottom: 1px solid #5e0854;
+
 }
 .perfil{
     display: flex;
@@ -117,7 +119,7 @@ text-overflow: ellipsis;
     border-bottom: 1px  solid #5e0854;
     max-width: 100%;
     text-align: center;
-    padding:  8px 0px;
+    padding:  0px 0px;
     overflow-y: hidden;/**/
     overflow-x: auto;/**/
     white-space: nowrap;/**/
@@ -312,7 +314,7 @@ width: 100px;
 /* Ponemos un color de fondo y redondeamos las esquinas del thumb */
 .content-message-users::-webkit-scrollbar-thumb,
 .active-users::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: #5d5d5d;
     border-radius: 4px;
 }
 /* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
@@ -329,7 +331,7 @@ width: 100px;
 /* Ponemos un color de fondo y redondeamos las esquinas del track */
 .content-message-users::-webkit-scrollbar-track,
 .active-users::-webkit-scrollbar-track {
-    background: #e1e1e1;
+    background: #370143;
     border-radius: 4px;
 }
 /* Cambiamos el fondo cuando esté en active o hover */

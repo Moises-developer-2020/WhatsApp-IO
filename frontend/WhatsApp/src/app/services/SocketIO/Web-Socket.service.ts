@@ -12,7 +12,12 @@ export class WebSocketService {
     private readonly Server="http://localhost:3000";
 
     constructor() {
-        this.socket=io(this.Server);
+        this.socket=io(this.Server,{
+            'reconnection': true,
+            'reconnectionDelay': 10000,
+            'reconnectionDelayMax' : 50000,
+            'reconnectionAttempts': 5
+     });
     }
 
     //for listen messages
