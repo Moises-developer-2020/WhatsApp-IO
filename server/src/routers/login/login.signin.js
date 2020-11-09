@@ -11,8 +11,9 @@ router.post('/signIn',async (req, res)=>{
 
     //validation the email
     if(!/^[a-z0-9_.]+@[a-z0-9]+\.[a-z0-9_.]+$/i.test(email)) return res.status(400).json({msm:'Incorrect format'});
-     
+    
     const user= await User.findOne({email});
+    
 
     if(!user) return res.status(400).json({msm:'Email not found'});
 

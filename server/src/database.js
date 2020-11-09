@@ -5,4 +5,4 @@ mongoose.connect('mongodb://localhost/WhatsApp-IO',{
     useUnifiedTopology:true
 })
     .then(db => console.log('Database is coneccted'))
-    .catch(err => console.log('Error database'))
+    .catch(err =>  console.log('Error database' +err))
