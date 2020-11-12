@@ -2,9 +2,35 @@ const {Schema, model} =require('mongoose');
 
 const MessageSchema= new Schema({
 
+   /* _id_user:String,
+    name:String, 
+    code_message:Array */ 
     _id_user:String,
     name:String, 
-    code_message:Array  
+    code_message:[
+        {
+            _id_user_receiver:String,
+            image_user_receiver:String,                             
+            data:                                               
+            [                                                   
+                {                                              
+                    _id_user_emisor:String,                        
+                    _id_user_receptor:String,                      
+                    message:{                              
+                        file:{                             
+                            docs:[],                        
+                            image:[]                       
+                        },                                    
+                        messages:{                             
+                            msm:String,                            
+                            created_at:String                      
+                        }                                          
+    
+                    } 
+                }                                            
+            ]
+        }
+    ]
        
     
 },{

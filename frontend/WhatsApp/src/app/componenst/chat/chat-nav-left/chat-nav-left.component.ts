@@ -24,20 +24,14 @@ export class ChatNavLeftComponent implements OnInit {
     name
   }];
 
-  MyID;//my id receive from getAllUsersInSearch()
+  MyID;//my id receive from 'chatService.getAllUsersInSearch()'
 
   constructor(
     private chatService:ChatService,
     private authService:AuthServiceService,
     private webSocketService:WebSocketService) { }
 
-  ngOnInit(): void {
-    this.webSocketService.listen('messages-user-selected')
-    .subscribe(res=>{
-      console.log(res);
-      
-    });
-  }
+  ngOnInit(): void {}
 
   openSearch(key, type:boolean){ //show hidden div the search-User-content
     type?key.classList.add('show'):key.classList.remove('show');

@@ -19,7 +19,7 @@ messages=[
             
             /////////////////////////////////////////////////////////////////////////////////
             {                                                                               /
-                "*_id de usuario receptor*":{                                               /
+                _id_message:{*_id de usuario receptor*                                               /
                     image_user_receptor:"",                                                 /
                     data:                                                                   /
                     [                                                                       /

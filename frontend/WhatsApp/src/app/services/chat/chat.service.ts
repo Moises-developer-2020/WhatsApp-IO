@@ -6,6 +6,7 @@ import { HttpClient } from "@angular/common/http";
   providedIn: 'root'
 })
 export class ChatService {
+  //userSelected={};//(response SocketIO) user selected in search or myContacts
 
   private readonly URL_API="http://localhost:3000/api";
 

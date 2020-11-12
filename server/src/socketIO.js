@@ -1,6 +1,11 @@
 const { set } = require('mongoose');
 const SocketIO=require('socket.io')
 const User=require('./models/user');
+const MGMessages=require('./models/message');
+
+const CryptoJS=require('crypto-js');
+const { $where, updateOne } = require('./models/user');
+const KeyCryptoJS="Message";
 
 const webSocketServer={};
 var usersConeccted={};//data the users connected
@@ -72,37 +77,159 @@ webSocketServer.init=(server)=>{
         });
         
         
-        socket.on('user-selected',async (data)=>{
-            var resp={
-                exist:false,
-                MyContacts:false,
-                newUser:false
+        socket.on('user-selected',async (data)=>{//user selected on search or Mycontact
+            var response={
+                type:Boolean,// false=new, true=myContact 
+                msm:null, //messages or data of users
+                myId:null, //just to check who sent the message//solo para verifica quien envia el mensaje
+                messages:[]
             }
+            if(usersConeccted[data.MyID]){//check if user connected
+                const user= await User.findOne({_id:data.id},{"_id":1,"name":1,"email":1});//check if user exists
+                if(user){//if exist to user
+                    var userId=data.id;
 
-            const user= await User.findOne({_id:data.id},{"_id":1,"name":1,"email":1});//check if user exists
+                    //add the user selected to my array
+                    usersConeccted[data.MyID].sendMessage={user};//for send message to the user selected
+                    
 
-            if(user){
-                if(usersConeccted[data.MyID]['MyContacts'][1].id != data.id){//check if it`s in my contacts
-                    if(usersConeccted[data.MyID].newUserSelected){//add the user selected to my array
-                        usersConeccted[data.MyID].newUserSelected={
-                            user
+                    //search if have msm with of user
+                    const messages= await MGMessages.findOne({_id_user:data.MyID});
+                    console.log(messages.toJSON().code_message)
+                    
+                    
+                    
+
+                    if(messages.toJSON().code_message.length>0){//if have messages
+                        for(var i=0; i<messages.toJSON().code_message.length;i++){
+                            if(messages.toJSON().code_message[i]._id_user_receiver==userId){ //if have msm with user
+                                usersConeccted[data.MyID].newUserSelected={state:false};
+                                response={
+                                    type:true,
+                                    msm:user,//I sent all msm with this user
+                                    myId:data.MyID,
+                                    messages:messages.toJSON().code_message[i]
+                                
+                                }
+                                break;
+                            }else{
+                                usersConeccted[data.MyID].newUserSelected={state:true};
+    
+                                response={
+                                    type:false,
+                                    msm:user,
+                                    myId:data.MyID
+                                }
+                                
+                            }
                         }
-                        socket.emit('messages-user-selected',' it`s not in my contacts ');
+                    }else{
+                        usersConeccted[data.MyID].newUserSelected={state:true};
+                        response={
+                            type:false,
+                            msm:user,
+                            myId:data.MyID
+                        }
                     }
-                }else{
-                    socket.emit('messages-user-selected',' it`s in my contacts ');
+                
                 }
             }
+           
+            //console.log(response);
+            //send response to me
+            io.to(socket.id).emit('reponse-user-selected',response);
+
+
            // console.log(usersConeccted[data.MyID]['MyContacts'][1]);
             //console.log(usersConeccted[data.MyID]['MyContacts'][0].id);
-            //console.log(usersConeccted[data.MyID]);
-           // console.log(user);
             //console.log("myId: "+data.MyID+" id: "+data.id+" socketID: "+socket.id);
-            console.log(usersConeccted);
+            //console.log(usersConeccted);
            
 
         })
         
+        socket.on('send-message',async (message)=>{
+            response={
+                error:false,
+                sent:false,
+                userConeccted:false,
+                existUser:false,
+                existReceptor:false,
+            }
+
+            if(usersConeccted[message.MyId]){//if exist the user emisor
+                if(usersConeccted[message.MyId].socketId == socket.id){ //if socket id receive == my socket save
+                    if(usersConeccted[message.MyId].sendMessage.user['_id'] == message.receiver){//id del user receiver
+                        if(usersConeccted[message.MyId].newUserSelected.state){ //if is new user with me
+                            //new user                                                    
+                            var NewMessages={ //field 'code_message' the messages
+                                _id_user_receiver:message.receiver,
+                                image_user_receiver:"",                             
+                                data:                                               
+                                [                                                   
+                                    {                                              
+                                        _id_user_emisor:message.MyId,                        
+                                        _id_user_receptor:message.receiver,                      
+                                        message:{                              
+                                            file:{                             
+                                                docs:[],                        
+                                                image:[]                       
+                                            },                                    
+                                            messages:{                             
+                                                msm:message.msm,                            
+                                                created_at:message.createAt                      
+                                            }                                          
+                        
+                                        } 
+                                    }                                            
+                                ]                                                 
+                        
+                            }  
+                                
+                           // console.log(NewMessages[message.receiver].data[0].message);
+
+                           const newMsm= await MGMessages.updateOne({_id_user:message.MyId},{$push:{code_message:NewMessages}});//add new field to code_message
+                           console.log(newMsm);
+                           usersConeccted[message.MyId].newUserSelected.state=false;//becouse it's not is new user with me
+                        }else{
+                            //friend                                                    
+                            var receiver=message.receiver;
+                            var MoreMessages={};//field 'data' the messages
+                            MoreMessages={
+                                    _id_user_emisor:message.MyId,                      
+                                    _id_user_receptor:message.receiver,                      
+                                    message:{                              
+                                        file:{                             
+                                            docs:[{}],                        
+                                            image:[{}]                       
+                                        },                                    
+                                        messages:{                             
+                                            msm:message.msm,                            
+                                            created_at:message.createAt                      
+                                        }                                          
+                    
+                                    } 
+                                }                                            
+                            //aument new field to 'data' with the new message
+                            const MoreMsm= await MGMessages.updateOne({_id_user:message.MyId, 'code_message._id_user_receiver':receiver},{$push:{'code_message.$.data':MoreMessages}},{upsert:true});
+                            console.log(MoreMsm);
+                            /*const newMSM=MoreMsm.toJSON().code_message[0];
+                            newMSM.data.push(MoreMessages);
+                            var NewMSM=[receiver]={newMSM};
+                            const kl=await MGMessages.findOneAndUpdate({"_id_user":message.MyId, "code_message._id_user_receiver":receiver},{$push:{"code_message.data":NewMSM}});
+                            console.log(kl);*/
+                            //console.log(newMSM);
+
+                        }
+                    }
+                }
+            }
+
+            //console.log(message);
+            //console.log(CryptoJS.AES.decrypt(message.msm,KeyCryptoJS).toString(CryptoJS.enc.Utf8));
+            
+            //io.emit(usersConeccted[message.MyId].socketId).emit('response-msm-sent',CryptoJS.AES.decrypt(message.msm,KeyCryptoJS).toString(CryptoJS.enc.Utf8));
+        });
 
         /**************** */
         socket.on('disconnect',()=>{//for each disconnected user
@@ -114,12 +241,14 @@ webSocketServer.init=(server)=>{
                     if(usersConeccted[usersID[i]]){
                         if(usersConeccted[usersID[i]].socketId==socket.id){
                             usersConeccted[usersID[i]].disconnection();//execute desconnection time
+                            break;
                         }
                     }
                 }
             }
+            //add on break;
            
-           
+           //event only me send one message
            
            /* console.log(usersConeccted);
             console.log(usersID);*/
