@@ -5,7 +5,7 @@
             <img src="assets/public/icon/OptionBack.png" alt="back">
         </div>
         <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
-        <span><strong>{{UserSelectedResponse.msm.name}}</strong></span>
+        <span><strong>{{UserSelectedResponse.msm.user.name}}</strong></span>
     </div>
     <div class="nav-options">
         <span><img src="assets/public/icon/phone.png" alt="icon"></span>
@@ -14,25 +14,45 @@
     </div>
 </div>
 
-<div class="show-messages" >
+<div class="show-messages" #msm >
 
-    <div class="welcome-to-your-chat" [class.show]="UserSelectedResponse.msm.messages">
+    <div class="welcome-to-your-chat" *ngIf="!UserSelectedResponse.myId">
         <p><strong>WELCOME</strong></p>
         <small>Selection users for view the messages</small>
     </div>
 
     <div class="show-message-new-user" *ngIf="!UserSelectedResponse.type">
         <div class="new-user-image">
-            <img src="assets/public/icon/sonreir.svg" alt="{{UserSelectedResponse.msm.name}}">
+            <img src="assets/public/icon/sonreir.svg" alt="{{UserSelectedResponse.msm.user.name}}">
         </div>
         <div class="new-user-name">
-            <p>{{UserSelectedResponse.msm.name}}</p>
+            <p>{{UserSelectedResponse.msm.user.name}}</p>
         </div>
         <div class="new-user-email">
-            <p>{{UserSelectedResponse.msm.email}}</p>
+            <p>{{UserSelectedResponse.msm.user.email}}</p>
         </div>
     </div>
-    
+
+    <div class="showMessages" [class.show]="UserSelectedResponse.type" *ngFor="let msm of UserSelectedResponse.msm.messages.data">
+
+        <div class="show-messages-left" *ngIf="msm._id_user_emisor==UserSelectedResponse.msm.user._id" >
+            <div class="receptorIMG"><img src="assets/public/icon/sonreir.svg" alt="img"> </div>
+             <div class="content-message-left">
+                 <span class="toggle-left"></span>
+                 {{msm.message.messages.msm}}                 
+                 <span class="date-message-left">7:00 PM</span>
+             </div>
+        </div>
+         
+        <div class="show-messages-right" *ngIf="msm._id_user_receptor!=UserSelectedResponse.myId" >
+            <div class="content-message-right"> 
+                {{msm.message.messages.msm}}
+                <span class="toggle-right"></span>
+                <span class="date-message-right">7:00 PM</span>   
+            </div>
+        </div>
+
+    </div>
 
     <!--<div class="messages-left">
         <div class="show-messages-left">
@@ -145,7 +165,7 @@
             <span><img src="assets/public/icon/sonreir.svg" alt="icon"></span>
             <span><img src="assets/public/icon/image.png" alt="icon"></span>
             <div class="content-option-send">
-                <span (click)="sendMessage()" ><img src="assets/public/icon/send.png" alt="icon"></span>
+                <span (click)="sendMessage(msm)" ><img src="assets/public/icon/send.png" alt="icon"></span>
             </div>
         </div>
     </div>

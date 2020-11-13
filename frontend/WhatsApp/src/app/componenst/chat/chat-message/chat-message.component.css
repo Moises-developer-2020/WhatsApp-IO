@@ -49,12 +49,18 @@
     display: block;
     overflow: auto;  
 }
+.showMessages{
+    display: none;
+}
+.showMessages.show{
+   display: block;
+}
 .welcome-to-your-chat{
     height: 100%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    display: none;
+    display: flex;
     font-size: larger;
     text-align: center;
     font-family: cursive
@@ -135,7 +141,7 @@
 }
 .receptorIMG img{
 width: 24px;
-margin-right:6px;
+margin-right:5px;
 background-color: black;
 
 border-radius: 50px;
@@ -155,9 +161,13 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 .show-messages-right{
     text-align: end;
     text-align: right;
-    padding: 1px;
+    padding: 8px;
     padding-right: 10px;
     position: relative;
+}
+.show-messages-right.margin{
+    background-color: red;
+    border-bottom: 1px solid red;
 }
 .content-message-right{
     position: relative;
@@ -256,3 +266,4 @@ display: flex;
  border-left: 1px solid grey;
  padding: 0 7px;
 }
+
