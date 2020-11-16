@@ -6,6 +6,8 @@ import { User } from "../../../models/user";
 
 import { AlertComponent } from "../../static/alert/alert.component";
 import {WebSocketService  } from "../../../services/SocketIO/Web-Socket.service";
+import { ChatNavLeftComponent } from "../chat-nav-left/chat-nav-left.component";
+import * as CryptoJS from "crypto-js";
 
 @Component({
   selector: 'app-chat-content',
@@ -15,6 +17,8 @@ import {WebSocketService  } from "../../../services/SocketIO/Web-Socket.service"
 export class ChatContentComponent implements OnInit {
 
   userLogIn:User={};
+
+  private readonly passUserEncrypJS="Message";
 
   /******************************* */
 
@@ -31,6 +35,9 @@ export class ChatContentComponent implements OnInit {
   /**************** */
   @ViewChild(AlertComponent)
   WindowAlert:AlertComponent
+
+  @ViewChild(ChatNavLeftComponent)
+  ChatNavLeftComponent:ChatNavLeftComponent
 
   constructor(private chatService:ChatService, private authService:AuthServiceService, private webSocketService:WebSocketService) {
     this.MyData();
@@ -128,7 +135,6 @@ export class ChatContentComponent implements OnInit {
         showMessagesAdapter();
         searchAdaptable();
         
-
       }
       
       /*document.getElementById('All-content-id').onclick=function(){
@@ -162,6 +168,17 @@ export class ChatContentComponent implements OnInit {
           //history.replaceState('moises',location.pathname,'/chat/'+res.sendUser.name);
           this.webSocketService.connect();//conected in case i disconnected
           this.webSocketService.emit('userConeccted',this.userLogIn);//envio el id del usuario conectado al socket
+
+          //to the reload
+            if(localStorage.getItem('USL')){
+              var getUserSavedStorage=localStorage.getItem('USL');
+              getUserSavedStorage=CryptoJS.AES.decrypt(getUserSavedStorage,this.passUserEncrypJS).toString(CryptoJS.enc.Utf8);
+              getUserSavedStorage=JSON.parse(getUserSavedStorage);
+             //console.log(getUserSavedStorage);
+              //send request to the socket for get the messages
+              this.ChatNavLeftComponent.UserSelected(getUserSavedStorage); 
+
+            }
         }, 
         err=>{
           //muestro una alerta y redirijo a signIn

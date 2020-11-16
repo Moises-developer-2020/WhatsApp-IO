@@ -5,7 +5,7 @@ import { UserSelected } from "../../../models/userSelected";
 
 import * as CryptoJS from "crypto-js";
 import { DomSanitizer } from '@angular/platform-browser';
-import { NEVER } from 'rxjs';
+import { AuthServiceService } from '../../../services/login/auth-service.service';
 @Component({
   selector: 'app-chat-message',
   templateUrl: './chat-message.component.html',
@@ -32,33 +32,36 @@ export class ChatMessageComponent implements OnInit {
   Message;
   constructor(private chatService:ChatService,
     private webSocketService:WebSocketService,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer,
+    private authService:AuthServiceService) { }
 
   ngOnInit(): void {
 
-    this.webSocketService.listen('reponse-user-selected')
-    .subscribe(res=>{
-      this.UserSelectedResponse=res as UserSelected;
-      //console.log(this.UserSelectedResponse);
+    if(this.authService.refreshToken()){
+      this.webSocketService.listen('reponse-user-selected')
+      .subscribe(res=>{
+        this.UserSelectedResponse=res as UserSelected;
+        //console.log(this.UserSelectedResponse);
 
-      setTimeout(() => {
-        this.styleMessages();
-      }, 10);
-    });
-    
-    this.webSocketService.listen('response-msm-sent')
-    .subscribe(res=>{
-      console.log(res);
+        setTimeout(() => {
+          this.styleMessages();
+        }, 10);
+      });
       
-    })
+      this.webSocketService.listen('response-msm-sent')
+      .subscribe(res=>{
+        console.log(res);
+        
+      });
+    }
     
   }
   sendMessage(msm:HTMLDivElement){
     var NewMessage={
       MyId:this.UserSelectedResponse.myId,
       receiver:this.UserSelectedResponse.msm.user._id,
-     // msm:CryptoJS.AES.encrypt(this.Message,this.KeyCryptoJS).toString(),
-      msm:this.Message,
+      msm:CryptoJS.AES.encrypt(this.Message,this.KeyCryptoJS).toString(),
+      //msm:this.Message,
       createAt:new Date()
     }
     //send the msm to socket
@@ -89,11 +92,13 @@ export class ChatMessageComponent implements OnInit {
     
     setTimeout(() => {
      this.styleMessages();
-    }, 10);
+    }, 1);
    
     
   }
-
+  decryptMessage(message){
+    return CryptoJS.AES.decrypt(message,this.KeyCryptoJS).toString(CryptoJS.enc.Utf8);
+  }
   styleMessages(){
     //this.UserSelectedResponse.msm.messages.data.length
     /*for(var i=0; i<1;i++){
@@ -112,7 +117,7 @@ export class ChatMessageComponent implements OnInit {
           if(show_messages.children.item((i+1))){
               if(show_messages.children.item((i+1)).children.item(0).className=="show-messages-right"){
                       
-                show_messages.children.item((i+1)).children.item(0).setAttribute("style","background:#ff000033; margin-top: -14px;"); //delete padding 'div center'
+                show_messages.children.item((i+1)).children.item(0).setAttribute("style","margin-top: -14px;"); //delete padding 'div center'
                 show_messages.children.item((i+1)).children.item(0).children.item(0).setAttribute("style","border-radius:5px 2px 2px 5px;"); //delete div:children border-radius 'div center'
     
                 if(show_messages.children.item((i+1)).children.item(0).children.item(0).children.item(0) && show_messages.children.item((i+1)).children.item(0).children.item(0).children.item(0).className=="toggle-right"){
@@ -121,7 +126,7 @@ export class ChatMessageComponent implements OnInit {
     
                 if(show_messages.children.item((i)).children.item(0).children.item(0).children.item(0)){
                   if(show_messages.children.item((i)).children.item(0).children.item(0).children.item(0).className=="toggle-right"){
-                    show_messages.children.item((i)).children.item(0).children.item(0).setAttribute("style","background:blue; border-radius:10px 0 4px 5px;"); //delete border-radius 'first div'
+                    show_messages.children.item((i)).children.item(0).children.item(0).setAttribute("style"," border-radius:10px 0 4px 5px;"); //delete border-radius 'first div'
                     
                   } 
                 } 
@@ -131,7 +136,7 @@ export class ChatMessageComponent implements OnInit {
                   
                 
                 if(show_messages.children.item((i-1)).children.item(0).className=="show-messages-right"){
-                  show_messages.children.item((i)).children.item(0).children.item(0).setAttribute("style","background:#7d7d7d; border-radius:5px 4px 10px 10px;"); //add border-radius 'last div'
+                  show_messages.children.item((i)).children.item(0).children.item(0).setAttribute("style","border-radius:5px 4px 10px 10px;"); //add border-radius 'last div'
                 }
                 // show_messages.children.item((i+1)).children.item(0).setAttribute("style","background:green;"); //delete padding
               }
@@ -144,7 +149,7 @@ export class ChatMessageComponent implements OnInit {
         if(show_messages.children.item((i+1))){
           if(show_messages.children.item((i+1)).children.item(0).className=="show-messages-left"){
                     
-            show_messages.children.item((i+1)).children.item(0).children.item(1).setAttribute("style","background:purple;border-radius:4px 5px 5px 4px; margin: 0 29px;"); //delete div:children border-radius 'div center'
+            show_messages.children.item((i+1)).children.item(0).children.item(1).setAttribute("style","border-radius:4px 5px 5px 4px; margin: 0 29px;"); //delete div:children border-radius 'div center'
            
             if(show_messages.children.item((i)).children.item(0).children.item(0).children.item(0)){//are for validate if exist
               show_messages.children.item((i)).children.item(0).children.item(0).children.item(0).remove(); //delete img receptor
@@ -155,7 +160,7 @@ export class ChatMessageComponent implements OnInit {
 
            if(show_messages.children.item((i)).children.item(0).children.item(1).children.item(0)){
               if(show_messages.children.item((i)).children.item(0).children.item(1).children.item(0).className=="toggle-left"){
-                show_messages.children.item((i)).children.item(0).children.item(1).setAttribute("style","background:orange; border-radius:5px 10px 4px 4px;  margin: 0 29px;"); //delete border-radius 'first div'
+                show_messages.children.item((i)).children.item(0).children.item(1).setAttribute("style"," border-radius:5px 10px 4px 4px;  margin: 0 29px;"); //delete border-radius 'first div'
                 
               } 
            }
@@ -164,7 +169,7 @@ export class ChatMessageComponent implements OnInit {
           }else{
                             
             if(show_messages.children.item((i-1)).children.item(0).className=="show-messages-left"){
-              show_messages.children.item((i)).children.item(0).children.item(1).setAttribute("style","background:#7d7d7d; border-radius:5px 4px 10px 10px;  "); //add border-radius 'last div'
+              show_messages.children.item((i)).children.item(0).children.item(1).setAttribute("style","border-radius:5px 4px 10px 10px;  "); //add border-radius 'last div'
             }
 
           }
@@ -173,17 +178,21 @@ export class ChatMessageComponent implements OnInit {
 
       //style the last div 
       if(show_messages.children.item((longtMessages-1)).children.item(0)){
-        if(show_messages.children.item((longtMessages-2)).children.item(0)){
-          if(show_messages.children.item((longtMessages-1)).children.item(0).className=="show-messages-left" && show_messages.children.item((longtMessages-2)).children.item(0).className=="show-messages-left"){
-            show_messages.children.item((longtMessages-1)).children.item(0).children.item(1).setAttribute("style","background:blue; border-radius:5px 4px 10px 10px; ")
+        if(show_messages.children.item((longtMessages-2))){
+          if(show_messages.children.item((longtMessages-2)).children.item(0)){
+            if(show_messages.children.item((longtMessages-1)).children.item(0).className=="show-messages-left" && show_messages.children.item((longtMessages-2)).children.item(0).className=="show-messages-left"){
+              show_messages.children.item((longtMessages-1)).children.item(0).children.item(1).setAttribute("style","border-radius:5px 4px 10px 10px; ")
+            }
           }
         }
       }
       if(show_messages.children.item((longtMessages-1)).children.item(0)){
-        if(show_messages.children.item((longtMessages-2)).children.item(0)){
-           if(show_messages.children.item((longtMessages-1)).children.item(0).className=="show-messages-right" && show_messages.children.item((longtMessages-2)).children.item(0).className=="show-messages-right"){
-            show_messages.children.item((longtMessages-1)).children.item(0).children.item(0).setAttribute("style","background:blue; border-radius:5px 4px 10px 10px;")
-          }
+        if(show_messages.children.item((longtMessages-2))){
+          if(show_messages.children.item((longtMessages-2)).children.item(0)){
+            if(show_messages.children.item((longtMessages-1)).children.item(0).className=="show-messages-right" && show_messages.children.item((longtMessages-2)).children.item(0).className=="show-messages-right"){
+             show_messages.children.item((longtMessages-1)).children.item(0).children.item(0).setAttribute("style","border-radius:5px 4px 10px 10px;")
+           }
+         }
         }
       }
 

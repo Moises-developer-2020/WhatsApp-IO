@@ -4,6 +4,7 @@ const router=Router();
 const bcrypt = require('../../libs/helperst');
 const User= require('../../models/user');
 const Message= require('../../models/message');
+const MyContacts= require('../../models/myContacts');
 const jwt=require('jsonwebtoken');
 
 //Users registration
@@ -20,12 +21,15 @@ router.post('/signUp',async (req, res)=>{
     const NewUser=new User({name, email, password});
     const _id_user=NewUser._id;
     const NewCollectionMessage=new Message({_id_user, name});
+    const NewCollectionMyContacts=new MyContacts({_id_user, name});
+
     //Encrypt password
     NewUser.password = await bcrypt.encryptPassword(password);
 
     //save User
     await NewUser.save(); //guardo el usuario registrado
     await NewCollectionMessage.save();//creo la colleccion de mensajes de este usuario
+    await NewCollectionMyContacts.save();//save la collections from myContacts
 
     const token=jwt.sign({_id:NewUser._id},'secretKey');
     

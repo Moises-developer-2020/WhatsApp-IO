@@ -54,6 +54,7 @@ export class AuthServiceService {
   logout(){
     this.webSocketService.disconect();
     localStorage.removeItem('token');
+    localStorage.removeItem('USL');
     this.router.navigate(['/login/signIn']);
   }
 

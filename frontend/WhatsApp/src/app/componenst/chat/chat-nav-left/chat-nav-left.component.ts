@@ -7,6 +7,8 @@ import {AlertComponent} from "../../static/alert/alert.component";
 import { WebSocketService } from "../../../services/SocketIO/Web-Socket.service";
 import * as CryptoJS from "crypto-js";
 
+import {myContact } from "../../../models/myContact";
+
 @Component({
   selector: 'app-chat-nav-left',
   templateUrl: './chat-nav-left.component.html',
@@ -16,6 +18,7 @@ export class ChatNavLeftComponent implements OnInit {
 
   @ViewChild(AlertComponent)
   WindowAlert:AlertComponent
+
   private readonly passUserEncrypJS="Message";
 
   //All users in the section Search
@@ -26,13 +29,32 @@ export class ChatNavLeftComponent implements OnInit {
 
   MyID;//my id receive from 'chatService.getAllUsersInSearch()'
 
+  MyContacts:myContact={
+    contacts:[
+   {
+      _id_user:"",
+      name:"",
+      message:[]
+    }
+  ]
+    
+}
   constructor(
     private chatService:ChatService,
     private authService:AuthServiceService,
     private webSocketService:WebSocketService) { }
 
-  ngOnInit(): void {}
-
+  ngOnInit(): void {
+    if(this.authService.refreshToken()){
+      this.webSocketService.listen('my-contact')
+      .subscribe(res=>{
+        this.MyContacts=res as myContact;
+        console.log(this.MyContacts);
+        
+      })
+    }
+  }
+  
   openSearch(key, type:boolean){ //show hidden div the search-User-content
     type?key.classList.add('show'):key.classList.remove('show');
 
@@ -83,12 +105,37 @@ export class ChatNavLeftComponent implements OnInit {
   };
 
   UserSelected(user:any){
+
     var data={
-      MyID:this.MyID, 
-      id:user.id//of the selected user
+      MyID:this.MyID || user.MyID, // || user.MyID to 'userSavedStorage'
+      id:user.id,//of the selected user
+      name:user.name
     }
     this.webSocketService.emit('user-selected',data);
-    history.pushState('','','/chat/'+user.name+'/'+user.id);
+    //history.pushState('','','/chat/'+user.name+'/'+user.id);
+    history.pushState('','','/chat/'+user.name);
+
+    //for if reload
+    var userSavedStorage=JSON.stringify(data);
+    //USL =USER SAVED SELECTED
+    if(localStorage.getItem('USL')){
+      localStorage.removeItem('USL');
+    }
+    localStorage.setItem('USL',CryptoJS.AES.encrypt(userSavedStorage,this.passUserEncrypJS).toString());
+
+    //close the user search window
+    var search_User_content=document.querySelector('.search-User-content');
+    search_User_content.className.includes("show")?search_User_content.classList.remove('show'):"";
+
+  }
+
+  decryptMessages(message){
+    try {
+      return CryptoJS.AES.decrypt(message,this.passUserEncrypJS).toString(CryptoJS.enc.Utf8)  
+    } catch (error) {
+      return message;
+    }
+    
   }
   
 }

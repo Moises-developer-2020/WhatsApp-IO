@@ -39,14 +39,15 @@
             <div class="receptorIMG"><img src="assets/public/icon/sonreir.svg" alt="img"> </div>
              <div class="content-message-left">
                  <span class="toggle-left"></span>
-                 {{msm.message.messages.msm}}                 
+                 {{decryptMessage(msm.message.messages.msm)}}      
+                            
                  <span class="date-message-left">7:00 PM</span>
              </div>
         </div>
          
         <div class="show-messages-right" *ngIf="msm._id_user_receptor!=UserSelectedResponse.myId" >
             <div class="content-message-right"> 
-                {{msm.message.messages.msm}}
+                {{decryptMessage(msm.message.messages.msm)}}      
                 <span class="toggle-right"></span>
                 <span class="date-message-right">7:00 PM</span>   
             </div>

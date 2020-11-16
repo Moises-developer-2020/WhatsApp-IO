@@ -211,6 +211,16 @@ max-width: 100%;
    position: relative;
    overflow: auto;
 }
+.My-Contact-Welcome{
+    text-shadow: 1px 0px 7px #ffffff;
+    font-family: cursive;
+    color: #cecece;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+}
 .users-message-info{
 position: relative;
 display: flex;

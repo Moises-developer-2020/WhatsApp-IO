@@ -2,6 +2,7 @@ const { set } = require('mongoose');
 const SocketIO=require('socket.io')
 const User=require('./models/user');
 const MGMessages=require('./models/message');
+const MGmyContacts=require('./models/myContacts');
 
 const CryptoJS=require('crypto-js');
 const { $where, updateOne } = require('./models/user');
@@ -38,7 +39,7 @@ webSocketServer.init=(server)=>{
                             var ud=usersID.indexOf(this.id);
                             usersID.splice(ud,1)
                             console.log("delete: ", this.name);
-                        }, 3000);
+                        }, 3000); //3s
                     },
                     stopDisconnection:function(){//stop desconnection of user
                         clearTimeout(this.time);
@@ -69,10 +70,15 @@ webSocketServer.init=(server)=>{
             if(!usersID.includes(user._id)){//if it is not, add it
                 usersID.push(user._id);
             }
-            
-            console.log( usersConeccted);
+            //send my myContact 
+            var mycontact=await MGmyContacts.findOne({_id_user:user._id},{"contacts":1,"_id":0});
+            io.to(socket.id).emit('my-contact',mycontact);
+
+
+            //console.log(mycontact);
+           /* console.log( usersConeccted);
             console.log(usersID);
-            console.log("usuarios: "+Object.keys(usersConeccted).length);
+            console.log("usuarios: "+Object.keys(usersConeccted).length);*/
             
         });
         
@@ -99,13 +105,11 @@ webSocketServer.init=(server)=>{
                     const messages= await MGMessages.findOne({_id_user:data.MyID});
                     //console.log(messages.toJSON().code_message)
                     
-                    
-                    
 
                     if(messages.toJSON().code_message.length>0){//if have messages
                         for(var i=0; i<messages.toJSON().code_message.length;i++){
                             if(messages.toJSON().code_message[i]._id_user_receiver==userId){ //if have msm with user
-                                usersConeccted[data.MyID].newUserSelected={state:false};
+                                usersConeccted[data.MyID].newUserSelected={state:false};//true is becouse no have msm with he
                                 response={
                                     type:true,
                                     msm:{//I sent all msm with this user
@@ -164,13 +168,13 @@ webSocketServer.init=(server)=>{
         })
         
         socket.on('send-message',async (message)=>{
-            response={
+            /*response={
                 error:false,
                 sent:false,
                 userConeccted:false,
                 existUser:false,
                 existReceptor:false,
-            }
+            }*/
 
             if(usersConeccted[message.MyId]){//if exist the user emisor
                 if(usersConeccted[message.MyId].socketId == socket.id){ //if socket id receive == my socket save
@@ -192,7 +196,8 @@ webSocketServer.init=(server)=>{
                                             },                                    
                                             messages:{                             
                                                 msm:message.msm,                            
-                                                created_at:message.createAt                      
+                                                created_at:message.createAt,
+                                                read:false //leído                      
                                             }                                          
                         
                                         } 
@@ -200,14 +205,33 @@ webSocketServer.init=(server)=>{
                                 ]                                                 
                         
                             }  
-                                
+
+                            var mycontact={
+                                _id_user:message.receiver,
+                                name:usersConeccted[message.MyId].sendMessage.user['name'],
+                                message:{
+                                    msm:message.msm,                            
+                                    created_at:message.createAt,
+                                    read:false,
+                                    send:"Tú: "
+                                }
+                            }
+                            
                            // console.log(NewMessages[message.receiver].data[0].message);
                             //save for me 'user emisor'
                            await MGMessages.updateOne({_id_user:message.MyId},{$push:{code_message:NewMessages}});//add new field to code_message
+                           await MGmyContacts.updateOne({_id_user:message.MyId},{$push:{contacts:mycontact}});
+
                            //saved for user receiver
                            NewMessages._id_user_receiver=message.MyId;
                            await MGMessages.updateOne({_id_user:message.receiver},{$push:{code_message:NewMessages}});//add new field to code_message
+                           mycontact._id_user=message.MyId;
+                           mycontact.name=usersConeccted[message.MyId].name;
+                           mycontact.message.send="";
+                           await MGmyContacts.updateOne({_id_user:message.receiver},{$push:{contacts:mycontact}});
+
                            //console.log(newMsm);
+                           
                            usersConeccted[message.MyId].newUserSelected.state=false;//becouse it's not is new user with me
                         }else{
                             //friend                                                    
@@ -227,12 +251,31 @@ webSocketServer.init=(server)=>{
                                         }                                          
                     
                                     } 
-                                }                                            
+                                }   
+                                
+                                //update mycontacts with the new messages
+                                var UpdateMyContact={
+                                    _id_user:receiver,
+                                    name:usersConeccted[message.MyId].sendMessage.user['name'],
+                                    message:{
+                                        msm:message.msm,                            
+                                        created_at:message.createAt,
+                                        read:false,
+                                        send:"Tú: "
+                                    }
+                                }
                             //aument new field to 'data' with the new message
                             ////save for me 'user emisor'
                             await MGMessages.updateOne({_id_user:message.MyId, 'code_message._id_user_receiver':receiver},{$push:{'code_message.$.data':MoreMessages}},{upsert:true});
+                            await MGmyContacts.updateOne({_id_user:message.MyId,"contacts._id_user":receiver},{$set:{"contacts.$.name":UpdateMyContact.name,"contacts.$.message":UpdateMyContact.message}});
+                           
                             //save for 'user receiver'
                             await MGMessages.updateOne({_id_user:receiver, 'code_message._id_user_receiver':message.MyId},{$push:{'code_message.$.data':MoreMessages}},{upsert:true});
+                            UpdateMyContact._id_user=message.MyId;
+                            UpdateMyContact.name=usersConeccted[message.MyId].name;
+                            UpdateMyContact.message.send="";
+                            await MGmyContacts.updateOne({_id_user:receiver, 'contacts._id_user':message.MyId},{$set:{"contacts.$.name":UpdateMyContact.name,"contacts.$.message":UpdateMyContact.message}});
+
                             //console.log(MoreMsm);
                             /*const newMSM=MoreMsm.toJSON().code_message[0];
                             newMSM.data.push(MoreMessages);

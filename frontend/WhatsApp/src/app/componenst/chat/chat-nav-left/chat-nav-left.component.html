@@ -66,59 +66,41 @@
     </a>
 </div>
 
-<div class="content-message-users"> 
-    <div class="users-message-info ripple">
-        <div class="users-message-info-left">
-            <span class="users-message-infor-left-actived"></span>
-            <img src="assets/public/icon/sonreir.svg" alt="img">
-        </div>
-        <div class="users-message-info-center ">
-            <div class="users-message-info-center-name">
-                <span><strong>Jose Moises iglesias</strong></span>
+<div class="content-message-users">
+
+    <div class="My-Contact-Welcome" *ngIf="MyContacts.contacts.length<=0">
+        Your users will appear here
+    </div>
+    <div class="users" *ngFor="let ct of MyContacts.contacts; let i=index;">
+        
+
+        <div class="users-message-info ripple" (click)="UserSelected({id:ct._id_user,name:ct.name})">
+            <div class="users-message-info-left">
+                <span class="users-message-infor-left-actived"></span>
+                <img src="assets/public/icon/sonreir.svg" alt="img">
             </div>
-            <div class="users-message-info-center-message">
-                <span class="emit">Tu: </span>
-                <span class="message-emit">This is the message</span>
+            <div class="users-message-info-center ">
+                <div class="users-message-info-center-name">
+                    <span><strong>{{ct.name}}</strong></span>
+                </div>
+                <div class="users-message-info-center-message">
+                    <span class="emit">{{ct.message.send}}</span>
+                    <span class="message-emit">{{decryptMessages(ct.message.msm)}}</span>
+                </div>
             </div>
-        </div>
-        <div class="users-message-info-right">
-            <div class="users-message-info-right-date">
-                <span><small>20 Feb 2020</small></span>
-            </div>
-            <div class="info-message-send">
-                <span class="info-send">
-                    <img src="assets/public/icon/check.png" alt="S">
-                </span>
+            <div class="users-message-info-right">
+                <div class="users-message-info-right-date">
+                    <span><small>20 Feb 2020</small></span>
+                </div>
+                <div class="info-message-send">
+                    <span class="info-send">
+                        <img src="assets/public/icon/check.png" alt="S">
+                    </span>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="users-message-info ripple">
-        <div class="users-message-info-left">
-            <span class="users-message-infor-left-actived"></span>
-            <img src="assets/public/icon/sonreir.svg" alt="img">
-        </div>
-        <div class="users-message-info-center">
-            <div class="users-message-info-center-name">
-                <span><strong>Jose Moises iglesias</strong></span>
-            </div>
-            <div class="users-message-info-center-message">
-                <span class="emit">Tu: </span>
-                <span class="message-emit">This is the message</span>
-            </div>
-        </div>
-        <div class="users-message-info-right">
-            <div class="users-message-info-right-date">
-                <span><small>20 Feb 2020</small></span>
-            </div>
-            <div class="info-message-send">
-                <span class="info-send">
-                    <img src="assets/public/icon/check.png" alt="S">
-                </span>
-            </div>
-        </div>
-    </div>
-
+<!--
     <div class="users-message-info ripple">
         <div class="users-message-info-left">
             <span class="users-message-infor-left-actived"></span>
@@ -171,7 +153,7 @@
         </div>
     </div>
 
-    <div class="users-message-info">
+    <div class="users-message-info ripple">
         <div class="users-message-info-left">
             <span class="users-message-infor-left-actived"></span>
             <img src="assets/public/icon/sonreir.svg" alt="img">
@@ -378,5 +360,32 @@
             </div>
         </div>
     </div>
+
+    <div class="users-message-info">
+        <div class="users-message-info-left">
+            <span class="users-message-infor-left-actived"></span>
+            <img src="assets/public/icon/sonreir.svg" alt="img">
+        </div>
+        <div class="users-message-info-center">
+            <div class="users-message-info-center-name">
+                <span><strong>Jose Moises iglesias</strong></span>
+            </div>
+            <div class="users-message-info-center-message">
+                <span class="emit">Tu: </span>
+                <span class="message-emit">This is the message</span>
+            </div>
+        </div>
+        <div class="users-message-info-right">
+            <div class="users-message-info-right-date">
+                <span><small>20 Feb 2020</small></span>
+            </div>
+            <div class="info-message-send">
+                <span class="info-send">
+                    <img src="assets/public/icon/check.png" alt="S">
+                </span>
+            </div>
+        </div>
+    </div>
+    -->
 </div>
 <app-alert></app-alert>
