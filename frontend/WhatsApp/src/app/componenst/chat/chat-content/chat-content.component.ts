@@ -169,6 +169,7 @@ export class ChatContentComponent implements OnInit {
           this.webSocketService.connect();//conected in case i disconnected
           this.webSocketService.emit('userConeccted',this.userLogIn);//envio el id del usuario conectado al socket
 
+          this.ChatNavLeftComponent.MyID=this.userLogIn._id;//send myId a chat-nav-left.component
           //to the reload
             if(localStorage.getItem('USL')){
               var getUserSavedStorage=localStorage.getItem('USL');

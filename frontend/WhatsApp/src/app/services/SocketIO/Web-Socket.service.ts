@@ -22,7 +22,7 @@ export class WebSocketService {
 
     //for listen messages
     listen(eventName:String){
-        return new Observable((Subscriber)=>{
+        return new Observable<any>((Subscriber)=>{
             this.socket.on(eventName,(data)=>{
                 Subscriber.next(data);
             });

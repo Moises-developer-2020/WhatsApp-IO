@@ -23,7 +23,9 @@ const MessageSchema= new Schema({
                         },                                    
                         messages:{                             
                             msm:String,                            
-                            created_at:String                      
+                            created_at:String,
+                            read:String,
+                            image:String                      
                         }                                          
     
                     } 

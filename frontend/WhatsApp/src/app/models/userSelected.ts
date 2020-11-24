@@ -6,6 +6,7 @@ export class UserSelected {
             _id:String,
             name:String,
             email:String,
+            image:String
         }
         messages:{
             data:any

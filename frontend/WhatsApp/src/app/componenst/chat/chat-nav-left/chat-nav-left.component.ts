@@ -49,7 +49,7 @@ export class ChatNavLeftComponent implements OnInit {
       this.webSocketService.listen('my-contact')
       .subscribe(res=>{
         this.MyContacts=res as myContact;
-        console.log(this.MyContacts);
+        //console.log(this.MyContacts);
         
       })
     }

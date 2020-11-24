@@ -11,6 +11,7 @@ const jwt=require('jsonwebtoken');
 router.post('/signUp',async (req, res)=>{
     //console.log(req.body);
     const {name, email, password}=req.body;
+    const image="";
 
     //validation name only letters
     if(!/^[a-z ]+$/i.test(name)) return res.status(400).json({name:'Incorrect format'});
@@ -18,7 +19,7 @@ router.post('/signUp',async (req, res)=>{
     //validation the email
     if(!/^[a-z0-9_.]+@[a-z0-9]+\.[a-z0-9_.]+$/i.test(email)) return res.status(400).json({email:'Incorrect format'});
     
-    const NewUser=new User({name, email, password});
+    const NewUser=new User({name, email, password, image});
     const _id_user=NewUser._id;
     const NewCollectionMessage=new Message({_id_user, name});
     const NewCollectionMyContacts=new MyContacts({_id_user, name});
