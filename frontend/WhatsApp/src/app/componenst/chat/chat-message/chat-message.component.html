@@ -24,7 +24,7 @@
         <small>Selection users for view the messages</small>
     </div>
 
-    <div class="show-message-new-user" *ngIf="UserSelectedResponse.type || !UserSelectedResponse.type">
+    <div class="show-message-new-user" *ngIf="!UserSelectedResponse.type || UserSelectedResponse.msm.messages.data.length > 0 ">
         <div class="new-user-image">
             <img src="assets/public/icon/sonreir.svg" alt="{{UserSelectedResponse.msm.user.name}}">
         </div>

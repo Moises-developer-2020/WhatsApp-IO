@@ -90,7 +90,7 @@ export class ChatMessageComponent implements OnInit {
       
       this.webSocketService.listen('response-msm-sent')//resp from message send
       .subscribe(res=>{
-       console.log(res);
+       //console.log(res);
         
 
         //paint the message send  
@@ -114,10 +114,9 @@ export class ChatMessageComponent implements OnInit {
           //yo envie el mensaje;
           this.readAndViewMessage();
           setTimeout(() => {
-            this.styleMessageSendNow();
             this.styleMessageSendNow('send');//paint the image send
           }, 1);
-          console.log("I");
+         // console.log("I");
           
 
         }else{//put send in the user receive //poner enviado en el usuario receptor
@@ -183,8 +182,9 @@ export class ChatMessageComponent implements OnInit {
         }
     }
     //console.log(message);
-    this.UserSelectedResponse.msm.messages.data.push(message);
-    //console.log(this.UserSelectedResponse.msm.messages.data);
+
+    this.UserSelectedResponse.msm.messages.data.push(message);//insert message in the array
+    this.UserSelectedResponse.type=true;//for show the first message send
     
 
     //send the msm to socket
@@ -303,28 +303,27 @@ export class ChatMessageComponent implements OnInit {
 
         }
       }
-      var df=0;
+      var cantRepet=0;
       if(state=='MessageRead' || state=="send"){
-        
         for(var i=0; i<longitud;i++){
-          if(show_messages.children.item((i+1)).children.item(0).className=="show-messages-right"){
-            if(this.UserSelectedResponse.msm.messages.data[i].message.messages.read == "send" || this.UserSelectedResponse.msm.messages.data[i].message.messages.read == "sending"){
-              df++;
-              console.log("df: "+df);
-              
+          if(show_messages.children.item((i+1))){
+            if(show_messages.children.item((i+1)).children.item(0).className=="show-messages-right"){
+              if(this.UserSelectedResponse.msm.messages.data[i].message.messages.read == "send" || this.UserSelectedResponse.msm.messages.data[i].message.messages.read == "sending"){
+                cantRepet++; //optener la cantidad que debe repetir el array *2
+               /// console.log("cantRepet: "+cantRepet);
+                
+              }
             }
           }
         }
       }
       var longitudMessage=this.UserSelectedResponse.msm.messages.data.length;
-      //this.countMessage= longitudMessage>5 ? (longitudMessage-5): longitudMessage;//only 5 repeat execute
-      //this.countMessage= longitudMessage>5 ? (longitudMessage-df): longitudMessage;//only 5 repeat execute
-      this.countMessage= longitudMessage-df//only 5 repeat execute
+      this.countMessage= longitudMessage-cantRepet// cant to repet
      
       if(state=="MessageRead" || state=="send"){
-        for(var i=this.countMessage; i<longitud;i++){
+        for(var i=this.countMessage; i<longitud;i++){// *2
           
-          console.log("df: "+df+" i: "+i+" users:"+this.UserSelectedResponse.msm.messages.data.length);
+          //console.log("cantRepet: "+cantRepet+" i: "+i+" users:"+this.UserSelectedResponse.msm.messages.data.length);
 
           if(state=='MessageRead'){
             if(this.UserSelectedResponse.msm.messages.data[i].message.messages.image){              
@@ -333,15 +332,17 @@ export class ChatMessageComponent implements OnInit {
                   if(show_messages.children.item((i+1)).children.item(0).className=="show-messages-left"){
                       this.UserSelectedResponse.msm.messages.data[i].message.messages.image=this.stateMessage.view.image;//delete image send for view
                       this.UserSelectedResponse.msm.messages.data[i].message.messages.read="Read";//change send
-                      console.log('hix3');
+                      //console.log('hix3');
                   }else{
 
-                    if( show_messages.children.item(i).children.item(0).children.item(1).className=="State-message"){
-                      show_messages.children.item(i).children.item(0).children.item(1).setAttribute('style','display:none');//delete state image -div center-
-                      console.log('hi');
-                      
+                    if( show_messages.children.item(i).children.item(0).children.item(1)){
+                      if( show_messages.children.item(i).children.item(0).children.item(1).className=="State-message"){
+                        show_messages.children.item(i).children.item(0).children.item(1).setAttribute('style','display:none');//delete state image -div center-
+                       // console.log('hi');
+                        
+                      }
                     }
-                    console.log('hix2');
+                   // console.log('hix2');
 
                     this.UserSelectedResponse.msm.messages.data[longitud-1].message.messages.image=this.stateMessage.view.image;
                     this.UserSelectedResponse.msm.messages.data[longitud-1].message.messages.read="Read";
@@ -349,7 +350,7 @@ export class ChatMessageComponent implements OnInit {
                   }
                 }
 
-                //**********caducated for /'info user class="show-message-new-user"'/ visible*********
+                //**********deprecated for /'info user class="show-message-new-user"'/ visible*********
               /*if(show_messages.children.item((i-1))){ 
                 if(show_messages.children.item((i-1)).children.item(0)){
                   if(show_messages.children.item((i-1)).children.item(0).children.item(1)){
@@ -372,13 +373,12 @@ export class ChatMessageComponent implements OnInit {
           if(state=='send'){
             if(this.UserSelectedResponse.msm.messages.data[i].message.messages.image){  
               if(this.UserSelectedResponse.msm.messages.data[i].message.messages.read != "true"){  
-                if( this.UserSelectedResponse.msm.messages.data[i].message.messages.image==this.stateMessage.sending.image){
+                if( this.UserSelectedResponse.msm.messages.data[i].message.messages.read=="sending"){
+               //   if( this.UserSelectedResponse.msm.messages.data[i].message.messages.image==this.stateMessage.sending.image){
                   this.UserSelectedResponse.msm.messages.data[i].message.messages.image=this.stateMessage.send.image;
                   this.UserSelectedResponse.msm.messages.data[i].message.messages.read='send';
 
                 }
-              
-                
               }
 
             }

@@ -210,8 +210,7 @@ webSocketServer.init=(server)=>{
                             var NewMessages={ //field 'code_message' the messages
                                 _id_user_receiver:message.receiver,
                                 image_user_receiver:"",                             
-                                data:                                               
-                                [                                                   
+                                data:                                                  
                                     {                                              
                                         _id_user_emisor:message.MyId,                        
                                         _id_user_receptor:message.receiver,                      
@@ -229,7 +228,7 @@ webSocketServer.init=(server)=>{
                         
                                         } 
                                     }                                            
-                                ]                                                 
+                                                                                
                         
                             }  
 

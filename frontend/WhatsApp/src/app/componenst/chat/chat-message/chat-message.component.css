@@ -171,7 +171,7 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     text-align: end;
     text-align: right;
     padding: 8px;
-    margin-right: 8px;
+    margin-right: 10px;
     padding-right: 10px;
     position: relative;
     /*for State-message*/
@@ -223,19 +223,22 @@ box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     border-bottom: 10px solid transparent;
 }
 .State-message{
-    margin-right: -15px;
+    margin-right: -17px;
     margin-left: 2px;
-    height: 16px;
+    height: 13px;
+    overflow: hidden;
     width: 13px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border: 1px solid #505050;
+    background: #00000059;
     border-radius: 33px;
+   
 }
 .State-message img{
-    width: 12px;
-    height: 12px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    background: #00000059;
-
+    width: 100%;
+    height: 100%;
     border-radius: 50px;
+    display: flex;
 }
 
 
