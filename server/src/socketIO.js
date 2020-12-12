@@ -75,6 +75,7 @@ webSocketServer.init=(server)=>{
             }
             //send my myContact 
             var mycontact=await MGmyContacts.findOne({_id_user:user._id},{"contacts":1,"_id":0});
+            
             io.to(socket.id).emit('my-contact',mycontact);
 
 
@@ -102,18 +103,50 @@ webSocketServer.init=(server)=>{
                     var userId=data.id;//user selected
 
                     //add the user selected to my array
-                    usersConeccted[data.MyID].sendMessage={user};//for send message to the user selected
-                    
+                    //for send message to the user selected
+                    /*if(usersConeccted[data.MyID].sendMessage.cantMessageSend>0){ //if reload
+                        var cantAnt=usersConeccted[data.MyID].sendMessage.cantMessageSend;
+                        usersConeccted[data.MyID].sendMessage={
+                            user,
+                            cantMessageSend:cantAnt
+                        };
+                    }else{*/
+                        usersConeccted[data.MyID].sendMessage={
+                            user,
+                            cantMessageSend:0
+                        };
+                   // }
+                    //console.log(user);
 
                     //search if have msm with of user
                     const messages= await MGMessages.findOne({_id_user:data.MyID});
+                    //deprecated
+                   /* const messageSendWithoutRead=await MGmyContacts.findOne({_id_user:userId});
+                   // console.log(messageSendWithoutRead);
+                    var indexMessage=messageSendWithoutRead.contacts.findIndex(function(element){
+                        return element._id_user == userId;
+                    });
+                    if(indexMessage != -1){
+                        if(messageSendWithoutRead.contacts[indexMessage].message.cantMessageReceive){
+                            usersConeccted[data.MyID].sendMessage.cantMessageSend=messageSendWithoutRead.contacts[indexMessage].message.cantMessageReceive;
+
+                        }
+                    }*/
                     //console.log(messages.toJSON().code_message)
+                    var messageSendWithoutRead=0;
                     
 
                     if(messages.toJSON().code_message.length>0){//if have messages
                         for(var i=0; i<messages.toJSON().code_message.length;i++){
                             if(messages.toJSON().code_message[i]._id_user_receiver==userId){ //if have msm with user
                                 usersConeccted[data.MyID].newUserSelected={state:false};//true is becouse no have msm with he
+                                for(var m=0; m< messages.toJSON().code_message[i].data.length; m++){//get the cant of the messages without read;
+                                    if(messages.toJSON().code_message[i].data[m].message.messages.read != "true"){
+                                        messageSendWithoutRead++;
+                                    }  
+                                }
+                                usersConeccted[data.MyID].sendMessage.cantMessageSend=messageSendWithoutRead;
+                                console.log('withoutL '+messageSendWithoutRead);
                                 response={
                                     type:true,
                                     msm:{//I sent all msm with this user
@@ -201,8 +234,10 @@ webSocketServer.init=(server)=>{
                 image:'assets/public/icon/checked16px.png'
             }
             if(usersConeccted[message.MyId]){//if exist the user emisor
-                if(usersConeccted[message.MyId].socketId == socket.id){ //if socket id receive == my socket save
+                if(usersConeccted[message.MyId].socketId == socket.id && usersConeccted[message.MyId].id != message.receiver){ //if socket id receive == my socket save
                     if(usersConeccted[message.MyId].sendMessage.user['_id'] == message.receiver){//id del user receiver
+                        usersConeccted[message.MyId].sendMessage.cantMessageSend+=1;
+                        var totalMessageSend=usersConeccted[message.MyId].sendMessage.cantMessageSend;
                         if(usersConeccted[message.MyId].newUserSelected.state){ //if is new user with me
                             //stateMessage
                             
@@ -240,7 +275,8 @@ webSocketServer.init=(server)=>{
                                     created_at:message.createAt,
                                     read:stateMSM.read,
                                     image:stateMSM.image,
-                                    send:"Tú: "
+                                    send:"Tú: ",
+                                    cantMessageReceive:0
                                 }
                             }
                             
@@ -255,10 +291,11 @@ webSocketServer.init=(server)=>{
                            mycontact._id_user=message.MyId;
                            mycontact.name=usersConeccted[message.MyId].name;
                            mycontact.message.send="";
+                           mycontact.message.cantMessageReceive=totalMessageSend;
                            await MGmyContacts.updateOne({_id_user:message.receiver},{$push:{contacts:mycontact}});
 
                            //console.log(newMsm);
-                           
+
                            usersConeccted[message.MyId].newUserSelected.state=false;//becouse it's not is new user with me
 
                            //send response to user receiver and to me
@@ -268,12 +305,15 @@ webSocketServer.init=(server)=>{
                                     contact:mycontact,
                                     emisor:message.MyId
                                 });
+                               // console.log(1.1);
                            }else{
                                 io.to(socket.id).emit('response-msm-sent',
                                 {   
                                     message:NewMessages.data,
                                     contact:mycontact
                                 });
+                               // console.log(1.2);
+
                            }
 
                         }else{
@@ -307,7 +347,9 @@ webSocketServer.init=(server)=>{
                                         created_at:message.createAt,
                                         read:stateMSM.read,//leido
                                         image:stateMSM.image,
-                                        send:"Tú: "
+                                        send:"Tú: ",
+                                        cantMessageReceive:0//
+
                                     }
                                 }
                             //aument new field to 'data' with the new message
@@ -320,6 +362,7 @@ webSocketServer.init=(server)=>{
                             UpdateMyContact._id_user=message.MyId;
                             UpdateMyContact.name=usersConeccted[message.MyId].name;
                             UpdateMyContact.message.send="";
+                            UpdateMyContact.message.cantMessageReceive=totalMessageSend;
                             await MGmyContacts.updateOne({_id_user:receiver, 'contacts._id_user':message.MyId},{$set:{"contacts.$.name":UpdateMyContact.name,"contacts.$.message":UpdateMyContact.message}});
 
                             
@@ -330,15 +373,19 @@ webSocketServer.init=(server)=>{
                                 contact:UpdateMyContact,
                                 emisor:message.MyId
                             });
-                            console.log(1);
+                            //console.log(2.1);
+
                            }else{
                             io.to(socket.id).emit('response-msm-sent',{
                                 message:MoreMessages,
                                 contact:UpdateMyContact
                             });
-                            console.log(2);
+                           // console.log(2.2);
+
                            }
                         }
+                        console.log(totalMessageSend);
+
                     }
                 }
             }
@@ -350,49 +397,117 @@ webSocketServer.init=(server)=>{
         });
 
         socket.on('state-message-views',async (user)=>{//estado que se envia cada ves que el usuario ve el mensaje que ha recibido
-            if(usersConeccted[user.id_receive]){
+            console.log('on');
                 if(usersConeccted[user.myId]){
-                    if(usersConeccted[user.id_receive].sendMessage.user['_id'] == user.myId ){//the send only if esta conectadp con migo
-                        if(usersConeccted[user.myId].sendMessage.user['_id'] == user.id_receive){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-                            //const l=await MGMessages.updateOne({_id_user:user.myId, 'code_message._id_user_receiver':user.id_receive,'code_message.data.message.messages.read':false},{$set:{"code_message.$.image_user_receiver":"not fount","code_message.$.data":{"data.$.message":{"message.$.messages":{"messages.$.read":{"read":"true"}}}}}});
-                            const l=await MGMessages.findOne({_id_user:user.myId,'code_message._id_user_receiver':user.id_receive});
-                            var setStateMenssage=[];
-                            setStateMenssage=l.toJSON();
-                            //console.log(setStateMenssage.code_message.length);
-                            let index=0;
-                            for(let i=0; i<setStateMenssage.code_message.length;i++){
-                                if(setStateMenssage.code_message[i]._id_user_receiver == user.id_receive){//optener el indice del usuario seleccionado
-                                    index=i;
-                                    for (let p = 0; p < setStateMenssage.code_message[index].data.length; p++) {//update the state to read[leido]
-                                        let imagen="assets/public/icon/sonreir.svg";
-                                        setStateMenssage.code_message[index].data[p].message.messages.read="true";
-                                        setStateMenssage.code_message[index].data[p].message.messages.image=imagen;
-                                        //console.log(setStateMenssage.code_message[index].data[p].message);
-                                    
-                                    };
-                                    break;//una vez encuentra el indice lo detengo
-                                };
-                            };             
-                            //console.log(l.toJSON().code_message[1].data[2].message.messages);
-                            //console.log(setStateMenssage);
-                            //console.log(index);
+                    console.log('I Connected');
+                    const userReceive= await User.findOne({_id:user.id_receive},{"_id":1,"name":1,"email":1,"image":1});//check if user exists
 
-                            //****PONER QUE CTUALIZE MIS CONTACTOS TAMBEIN**********
-                        
-                            const dataUpdate=setStateMenssage.code_message[index].data;
-                            //update for me
-                            const updateDataFromMessage=await MGMessages.updateOne({_id_user:user.myId, 'code_message._id_user_receiver':user.id_receive},{$set:{"code_message.$.data":dataUpdate}});                    
-                            //update for user_selected
-                            const updateDataFromReceive=await MGMessages.updateOne({_id_user:user.id_receive, 'code_message._id_user_receiver':user.myId},{$set:{"code_message.$.data":dataUpdate}});                    
-                        
-                            io.to(usersConeccted[user.myId].socketId).to(usersConeccted[user.id_receive].socketId).emit('response-state-message-views',{
-                                state:true
-                            });
-                        }   
-                    }
+                        if(userReceive){
+                            console.log('receive');
+                            if(usersConeccted[user.myId].sendMessage.user['_id'] == user.id_receive){
+                                console.log('if is user receive');
+                                let imagen="assets/public/icon/sonreir.svg";                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                //const l=await MGMessages.updateOne({_id_user:user.myId, 'code_message._id_user_receiver':user.id_receive,'code_message.data.message.messages.read':false},{$set:{"code_message.$.image_user_receiver":"not fount","code_message.$.data":{"data.$.message":{"message.$.messages":{"messages.$.read":{"read":"true"}}}}}});
+                                const l=await MGMessages.findOne({_id_user:user.myId,'code_message._id_user_receiver':user.id_receive});
+                                if(l){
+                                    console.log('l here');
+                                    var setStateMenssage=[];
+                                    setStateMenssage=l.toJSON();
+                                    //console.log(setStateMenssage.code_message.length);
+                                    let index=0;
+                                    for(let i=0; i<setStateMenssage.code_message.length;i++){
+                                        if(setStateMenssage.code_message[i]){//if have message
+                                            if(setStateMenssage.code_message[i]._id_user_receiver == user.id_receive){//optener el indice del usuario seleccionado
+                                                index=i;
+                                                for (let p = 0; p < setStateMenssage.code_message[index].data.length; p++) {//update the state to read[leido]
+                                                    
+                                                    setStateMenssage.code_message[index].data[p].message.messages.read="true";
+                                                    setStateMenssage.code_message[index].data[p].message.messages.image=imagen;
+                                                    //console.log(setStateMenssage.code_message[index].data[p].message);
+                                                
+                                                };
+                                                break;//una vez encuentra el indice lo detengo
+                                            };
+                                        }
+                                    };             
+                                    //console.log(l.toJSON().code_message[1].data[2].message.messages);
+                                    //console.log(setStateMenssage);
+                                    //console.log(index);
+                                    
+                                    //for update in mycontacts
+                                    let totalMessageSEnd=usersConeccted[user.myId].sendMessage.cantMessageSend;
+                                    var contacts = 
+                                    {  
+                                        read : "true",
+                                        image : imagen,
+                                        cantMessageReceive:totalMessageSEnd
+
+                                    };
+                                
+
+                                    //****PONER QUE CTUALIZE MIS CONTACTOS TAMBEIN**********
+                                
+                                    const dataUpdate=setStateMenssage.code_message[index].data;
+                                    /*//update for me
+                                    const updateDataFromMessage=await MGMessages.updateOne({_id_user:user.myId, 'code_message._id_user_receiver':user.id_receive},{$set:{"code_message.$.data":dataUpdate}});                    
+                                    const UpdateREADMyContacts=await MGmyContacts.updateOne({_id_user:user.myId, 'contacts._id_user':user.id_receive},{$set:{"contacts.$.message.read":contacts.read,"contacts.$.message.image":contacts.image}});
+                                    */
+                                    //update for user_selected
+                                    const updateDataFromReceive=await MGMessages.updateOne({_id_user:user.id_receive, 'code_message._id_user_receiver':user.myId},{$set:{"code_message.$.data":dataUpdate}});                    
+                                    const UpdateREADMyContactsFromReceive=await MGmyContacts.updateOne({_id_user:user.id_receive, 'contacts._id_user':user.myId},{$set:{"contacts.$.message.read":contacts.read,"contacts.$.message.image":contacts.image, "contacts.$.message.cantMessageReceive":contacts.cantMessageReceive}});
+
+                                    const UpdateREADMyContacts=await MGmyContacts.updateOne({_id_user:user.myId, 'contacts._id_user':user.id_receive},{$set:{"contacts.$.message.cantMessageReceive":0}});
+
+                                    //in the response 
+                                    //'state':true is for style of the messages
+                                    //'state':false only style in mycontacts
+                                    if(usersConeccted[user.id_receive]){//if user_receive is connected 
+                                        if(usersConeccted[user.id_receive].sendMessage.user){
+                                            if(usersConeccted[user.id_receive].sendMessage.user['_id'] == user.myId ){//the send only if esta conectadp con migo
+                                                //update for me
+                                                contacts.cantMessageReceive=0;
+                                                usersConeccted[user.myId].sendMessage.cantMessageSend=0;
+                                                const updateDataFromMessage=await MGMessages.updateOne({_id_user:user.myId, 'code_message._id_user_receiver':user.id_receive},{$set:{"code_message.$.data":dataUpdate}});                    
+                                                //const UpdateREADMyContacts=await MGmyContacts.updateOne({_id_user:user.myId, 'contacts._id_user':user.id_receive},{$set:{"contacts.$.message.read":contacts.read,"contacts.$.message.image":contacts.image, "contacts.$.message.cantMessageReceive":contacts.cantMessageReceive}});
+                                                const UpdateREADMyContacts=await MGmyContacts.updateOne({_id_user:user.myId, 'contacts._id_user':user.id_receive},{$set:{"contacts.$.message.read":contacts.read,"contacts.$.message.image":contacts.image}});
+                                                
+                                                io.to(usersConeccted[user.myId].socketId).to(usersConeccted[user.id_receive].socketId).emit('response-state-message-views',{
+                                                    state:true,//with me
+                                                    emisor:user.myId,
+                                                    receptor:user.id_receive,
+                                                    connected:true
+                                                });
+                                            }else{
+                                                io.to(usersConeccted[user.myId].socketId).to(usersConeccted[user.id_receive].socketId).emit('response-state-message-views',{
+                                                    state:false,
+                                                    emisor:user.myId,
+                                                    receptor:user.id_receive,
+                                                    connected:true
+                                                });
+                                            };
+                                        }else{
+                                            io.to(usersConeccted[user.myId].socketId).to(usersConeccted[user.id_receive].socketId).emit('response-state-message-views',{
+                                                state:false,
+                                                emisor:user.myId,
+                                                receptor:user.id_receive,
+                                                connected:true
+                                            });
+                                        };
+                                    }else{
+                                        io.to(usersConeccted[user.myId].socketId).emit('response-state-message-views',{
+                                            state:false,
+                                            emisor:user.myId,
+                                            receptor:user.id_receive,
+                                            connected:false
+                                        });
+                                    }
+                                }
+                            }   
+                        }
+                    
     
                 }
-            }
+            
         });
         /**************** */
         socket.on('disconnect',()=>{//for each disconnected user

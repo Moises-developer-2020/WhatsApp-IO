@@ -7,7 +7,7 @@
         <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
         <span class="usersReceptor-name">
             <strong>{{UserSelectedResponse.msm.user.name}}</strong>
-            <span class="typing" *ngIf="ResptypeMessage">Escribiendo</span>
+            <span class="typing" *ngIf="ResptypeMessage">Escribiendo...</span>
         </span>
     </div>
     <div class="nav-options">
@@ -44,7 +44,7 @@
                  <span class="toggle-left"></span>
                  {{decryptMessage(msm.message.messages.msm)}}      
                             
-                 <span class="date-message-left">7:00 PM</span>
+                 <span class="date-message-left">{{msm.message.messages.created_at | date:'shortTime'}}</span>
              </div>
         </div>
          
@@ -52,7 +52,7 @@
             <div class="content-message-right"> 
                 {{decryptMessage(msm.message.messages.msm)}}      
                 <span class="toggle-right"></span>
-                <span class="date-message-right">7:00 PM</span>   
+                <span class="date-message-right">{{msm.message.messages.created_at | date:'shortTime'}}</span>   
             </div>
             <div class="State-message">
                 <img src={{msm.message.messages.image}} class="stateUser" onerror="this.setAttribute('hidden',true)" title="{{msm.message.messages.read}}" alt="img"> 
@@ -108,7 +108,7 @@
             <span><img src="assets/public/icon/sonreir.svg" alt="icon"></span>
             <span><img src="assets/public/icon/image.png" alt="icon"></span>
             <div class="content-option-send">
-                <span (click)="sendMessage(msm)" ><img src="assets/public/icon/send.png" alt="icon"></span>
+                <span (click)="sendMessage()" ><img src="assets/public/icon/send.png" alt="icon"></span>
             </div>
         </div>
     </div>

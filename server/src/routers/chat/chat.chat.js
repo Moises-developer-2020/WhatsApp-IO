@@ -14,11 +14,12 @@ router.get('/chat',verifyTimeSession, verifyToken, async(req, res)=>{
         const{_id, name, email }=user
         const sendUser={_id, name, email};
 
-        res.json({sendUser});
+       return res.json({sendUser});
     } catch (error) {
        console.log('error'); 
+       return res.status(200).json({msm:'user not found'}); 
+
     } 
-    res.status(200).json({msm:'user not found'}); 
 });
 
 module.exports=router;

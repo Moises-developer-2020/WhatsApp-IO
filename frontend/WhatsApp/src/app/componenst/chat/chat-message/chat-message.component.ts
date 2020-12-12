@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from "../../../services/chat/chat.service";
 import { WebSocketService } from "../../../services/SocketIO/Web-Socket.service";
 import { UserSelected } from "../../../models/userSelected";
@@ -51,7 +51,7 @@ export class ChatMessageComponent implements OnInit {
       state:false,
       image:'assets/public/icon/sonreir.svg'
     }
-  }
+  };
 
   countMessage:number=0;
   constructor(private chatService:ChatService,
@@ -60,10 +60,12 @@ export class ChatMessageComponent implements OnInit {
     private authService:AuthServiceService) { }
 
   ngOnInit(): void {
-
+    this.chatService.UpdateContacts('mois');
     if(this.authService.refreshToken()){
       this.webSocketService.listen('reponse-user-selected')//resp from user selected
       .subscribe(res=>{
+        console.log('reponse-user-selected of chat-message');
+        
         this.UserSelectedResponse=res as UserSelected;
        // console.log(this.UserSelectedResponse);
         this.readAndViewMessage();
@@ -76,6 +78,8 @@ export class ChatMessageComponent implements OnInit {
       /**************************************************************************** */
       this.webSocketService.listen('resp-type-message')//resp from type-message
       .subscribe(res=>{
+        console.log('resp-type-message of chat-message');
+        
         if(this.UserSelectedResponse.msm.user._id == res.user){
           if(res.state){
             this.ResptypeMessage=true;
@@ -91,6 +95,7 @@ export class ChatMessageComponent implements OnInit {
       this.webSocketService.listen('response-msm-sent')//resp from message send
       .subscribe(res=>{
        //console.log(res);
+        console.log('response-msm-sent of chat-message');
         
 
         //paint the message send  
@@ -143,6 +148,8 @@ export class ChatMessageComponent implements OnInit {
         if(res.state){
           this.styleMessageSendNow('MessageRead');
         }
+        console.log('response-state-message-views of chat-message');
+
         
       })
 
@@ -150,8 +157,7 @@ export class ChatMessageComponent implements OnInit {
     }
     
   }
-  sendMessage(msm:HTMLDivElement){
-
+  sendMessage(){    
     this.typeMessage(false);
 
     var NewMessage={
@@ -189,18 +195,12 @@ export class ChatMessageComponent implements OnInit {
 
     //send the msm to socket
     try {
-     //setTimeout(() => {
       this.webSocketService.emit('send-message',NewMessage);
-      //console.log(this.UserSelectedResponse.msm.messages.data.length);
-      
-     /* this.UserSelectedResponse.msm.messages.data.splice((this.UserSelectedResponse.msm.messages.data.length-1),1);
-      message.message.messages.read='send';
-      this.UserSelectedResponse.msm.messages.data.push(message);*/
-     //}, 3000);
+      console.log('sent-message of chat-message');
+
     } catch (error) { }
 
     this.Message='';
-    msm.scrollTop=msm.scrollHeight;
     
     setTimeout(() => {
      this.styleMessages();
@@ -210,7 +210,6 @@ export class ChatMessageComponent implements OnInit {
   }
 
   typeMessage(msm:any){//tipea mensaje ...
-    
      //to send it only once
     var send={
       userReceive:this.UserSelectedResponse.msm.user._id,
@@ -218,7 +217,6 @@ export class ChatMessageComponent implements OnInit {
       typeMessage:false,
     }
   
-    
     if(msm.target){
       if(msm.target.value.length>0){
         send.typeMessage=true;
@@ -238,6 +236,8 @@ export class ChatMessageComponent implements OnInit {
 
     if(this.count== 0 || this.count == 1){//send only once if es true or false
       this.webSocketService.emit('type-message',send);
+      console.log('type-message of chat-message');
+
     }
     
 
@@ -251,6 +251,8 @@ export class ChatMessageComponent implements OnInit {
     }
 
     this.webSocketService.emit('state-message-views',user);
+    console.log('state-message-views of chat-message');
+
     
   }
 

@@ -278,6 +278,9 @@ padding: 5px ;
     max-width: 100%;
     
 }
+.users-message-info-center-message .message-emit.new{
+    font-weight: bold;
+}
 
 .users-message-info-right{
 display: block;
@@ -285,16 +288,46 @@ text-align: end;
 width: 100px;
 /*margin: 0 8px ;*/
 }
+.users-message-info-right-date.new{
+    color: green;
+}
 .users-message-info-right-date{
     font-size: 0.8em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 57px;
+    font-weight: bold;
 }
 .info-message-send{
-
+    text-align: end;
+    width: 57px;
 }
-.info-message-send img{
-    width: 20px;
+.info-message-send .info-send .cant-receive-message{
+    
+    font-size: 0.8em;
+    min-width: 15px;
+    max-width: 70px;
+
+    height: 15px;
+    text-align: center;
+    display: inline-block;
+    background-color: green;
+    padding: 3px;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px 2px rgb(0 0 0 / 0.02);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
+.info-message-send  img{
+    width: 21px;
+    background: rgb(119 119 119);
+    /*border: 1.5px solid #848484;*/
+    border-radius: 50px;
+    box-shadow: 0 4px 8px 2px rgb(0 0 0 / 0.02);
+}
 
 /* Ripple effect */
 .ripple {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as io from "socket.io-client";
-import { Observable, Subscriber } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +12,13 @@ export class WebSocketService {
     private readonly Server="http://localhost:3000";
 
     constructor() {
-        this.socket=io(this.Server,{
+        /*this.socket=io(this.Server,{
             'reconnection': true,
             'reconnectionDelay': 10000,
             'reconnectionDelayMax' : 50000,
             'reconnectionAttempts': 5
-     });
+     });*/
+     this.socket=io(this.Server);
     }
 
     //for listen messages

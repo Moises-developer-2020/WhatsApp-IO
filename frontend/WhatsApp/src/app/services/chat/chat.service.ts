@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 
 import { HttpClient } from "@angular/common/http";
-
 @Injectable({
   providedIn: 'root'
 })
@@ -9,6 +8,8 @@ export class ChatService {
   //userSelected={};//(response SocketIO) user selected in search or myContacts
 
   private readonly URL_API="http://localhost:3000/api";
+
+  @Output() Contacts:EventEmitter<String>= new EventEmitter();//send my contacts updated
 
   constructor(private http:HttpClient) { }
 
@@ -21,5 +22,8 @@ export class ChatService {
   }
   SearchUsers(name){
     return this.http.get<any>(this.URL_API+`/searchUsers/${name}`);
+  }
+  UpdateContacts(newContact){
+    this.Contacts.emit(newContact);
   }
 }

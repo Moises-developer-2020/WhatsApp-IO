@@ -84,17 +84,22 @@
                     <span><strong>{{ct.name}}</strong></span>
                 </div>
                 <div class="users-message-info-center-message">
-                    <span class="emit">{{ct.message.send}}</span>
-                    <span class="message-emit">{{decryptMessages(ct.message.msm)}}</span>
+                    <span class="emit" #emit>{{ct.message.send}}</span>
+                    <span *ngIf="ct.message.typeMessage" style="color: green;">Escribiendo... </span>
+                    <span *ngIf="!ct.message.typeMessage" class="message-emit" [class.new]="!imageReceive(ct.message.send) && ct.message.cantMessageReceive != 0">
+                        {{decryptMessages(ct.message.msm)}}
+                    </span>
                 </div>
             </div>
             <div class="users-message-info-right">
-                <div class="users-message-info-right-date">
-                    <span><small>20 Feb 2020</small></span>
+                <div class="users-message-info-right-date" [class.new]="!imageReceive(ct.message.send) && ct.message.cantMessageReceive != 0">
+                    <span><small>{{DateformatContacts(ct.message.created_at)}}</small></span>
                 </div>
-                <div class="info-message-send">
-                    <span class="info-send">
-                        <img src="{{ct.message.image}}" alt="S">
+                <div class="info-message-send"  >
+                    <span class="info-send" >
+                        <img *ngIf="imageReceive(ct.message.send)" src="{{ct.message.image}}"  title="{{ct.message.read}}">
+                        <span *ngIf="!imageReceive(ct.message.send) && ct.message.cantMessageReceive != 0" class="cant-receive-message" title="New message/s">{{ct.message.cantMessageReceive}}</span>
+                        <!--<img *ngIf="imageReceive(ct.message.send)" src="{{ct.message.image}}"  title="{{ct.message.read}}">-->
                     </span>
                 </div>
             </div>
