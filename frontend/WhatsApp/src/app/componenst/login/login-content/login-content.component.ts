@@ -13,7 +13,9 @@ export class LoginContentComponent implements OnInit {
   constructor(private auth:AuthServiceService, private router:Router) { 
     //this.auth.logout();
     if(this.auth.loggedIn()){
-      this.router.navigate(['/chat']);
+      if(this.auth.refreshToken()){
+        this.router.navigate(['/chat']);
+      }
     }
     
   }

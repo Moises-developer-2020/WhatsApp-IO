@@ -8,6 +8,7 @@ import { WebSocketService } from "../../../services/SocketIO/Web-Socket.service"
 import * as CryptoJS from "crypto-js";
 
 import {myContact } from "../../../models/myContact";
+import {MyContactsActive } from "../../../models/myContactsActive";
 
 @Component({
   selector: 'app-chat-nav-left',
@@ -34,9 +35,13 @@ export class ChatNavLeftComponent implements OnInit {
       {
         _id_user:"",
         name:"",
-        message:[]
+        message:[],
+        stateActive:false
       }
     ]  
+  };
+  contactsActive={
+    users:[]
   };
   userSelected:any;
   constructor(
@@ -45,20 +50,27 @@ export class ChatNavLeftComponent implements OnInit {
     private webSocketService:WebSocketService) { }
 
   ngOnInit(): void {
-    this.chatService.Contacts.subscribe(resp=>{
+    /*this.chatService.Contacts.subscribe(resp=>{
       console.log(resp);
-    })
+      this.contactsActive=resp;
+    })*/
+    
     if(this.authService.refreshToken()){
       this.webSocketService.listen('my-contact')
       .subscribe(res=>{
         console.log('my-contact');
         
+
         this.MyContacts=res as myContact;
+        var userss=JSON.stringify(this.MyContacts.contacts);
+        this.contactsActive.users=JSON.parse(userss);
 
         //add typemessage 
         this.MyContacts.contacts.forEach(element=>{
           element.message.typeMessage=false;
+          element.stateActive=false;         
         });
+        
 
         //order message by date send
         this.MyContacts.contacts.sort(function(a, b){
@@ -66,6 +78,12 @@ export class ChatNavLeftComponent implements OnInit {
           if(b.message.created_at<b.message.created_at) return 1;
           return 0;
         });
+        this.contactsActive.users.sort(function(a, b){
+          if(a.message.created_at>b.message.created_at) return -1;
+          if(b.message.created_at<b.message.created_at) return 1;
+          return 0;
+        });
+        
         //console.log(this.MyContacts);
         
       });
@@ -109,17 +127,18 @@ export class ChatNavLeftComponent implements OnInit {
           
         }
         //remove mi contact if exist and add to the new message updated
-
         if(this.MyContacts.contacts.length > 0){
           var index=this.MyContacts.contacts.findIndex(function(element){
             return element._id_user === res.contact._id_user;
           });          
           if(index != -1){          
+            res.contact.stateActive=this.MyContacts.contacts[index].stateActive?true:false;//mantener el estado activo del usuario
+            
             this.MyContacts.contacts.splice(index,1);
           }
         }
 
-        
+       
         this.MyContacts.contacts.push(res.contact);
         /*console.log(this.MyContacts.contacts.length);
         console.log(this.MyContacts);*/
@@ -138,8 +157,21 @@ export class ChatNavLeftComponent implements OnInit {
           if(b.message.created_at<b.message.created_at) return 1;
           return 0;
         });
-        console.log(this.MyContacts);
-        
+        //console.log(this.MyContacts);
+        /*************************
+         si quiero que me actualize el orden de los 
+         contactos activos cuando recivo la respuesta del mensaje enviado debo hacer
+         1- eliminar el json del usuario que me envio el mensaje
+         2- agregar push() nuevo json con el usuario que me envio el mensaje
+         3- ejecutar la sentencia de abajo 'this.contactsActive.users.sort'
+         * *************************  */
+       /* this.contactsActive.users.sort(function(a, b){
+          //order for state active and date of message sends
+          if(a.stateActive && a.message.created_at>b.message.created_at) return -1;
+          if(!a.stateActive && a.message.created_at<b.message.created_at) return 1;
+          if(!b.stateActive ) return -1;
+          return 0;
+        });*/
         
       });
 
@@ -175,7 +207,84 @@ export class ChatNavLeftComponent implements OnInit {
         console.log('response-state-message-views');
         console.log(res);
         
-      })
+      });
+      //response state-active
+      this.webSocketService.listen('state-active')
+      .subscribe(res=>{
+        //console.log(res);
+        
+        var state=JSON.stringify(res);
+        var stateActive=JSON.parse(state);
+        console.error(stateActive);
+        
+        //console.error(stateActive[0]._id_user);
+
+        for(var i=0; i<stateActive.length; i++){
+          var ID="";
+            if(stateActive[i]._id_receive == this.MyID){
+              ID=stateActive[i]._id_emit;
+            }else{
+              ID=stateActive[i]._id_receive;
+            }
+          var index=this.MyContacts.contacts.findIndex(function(contact){
+            return contact._id_user === ID;
+          });
+          if(index != -1){
+           // console.log('index: '+index);
+            this.MyContacts.contacts[index].stateActive=stateActive[i].state;
+          }
+          //change el index from .sort in contactsActive
+          //for contactsActive 
+          var ind=this.contactsActive.users.findIndex(function(contact){
+            return contact._id_user === ID;
+          });
+          if(ind != -1){
+            console.log('index: '+ind);
+            this.contactsActive.users[ind].stateActive=stateActive[i].state;
+          }
+        }
+        /*console.log(this.contactsActive);
+        console.log(this.MyContacts);*/
+        //order for state active, first users active
+        this.contactsActive.users.sort(function(a, b){
+          //order for state active and date of message sends
+          if(a.stateActive && a.message.created_at>b.message.created_at) return -1;
+          if(!a.stateActive && a.message.created_at<b.message.created_at) return 1;
+          if(!b.stateActive ) return -1;
+          return 0;
+        });
+        /*this.MyContacts.contacts.forEach(contact=>{
+          stateActive.forEach(stateA => {
+            var ID="";
+            if(stateA._id_receive == this.MyID){
+              ID=stateA._id_emit;
+            }else{
+              ID=stateA._id_receive;
+            }
+            if(contact._id_user === ID){
+              contact.stateActive=true;
+              console.error(1);
+              
+            }else{
+             // contact.stateActive=true;
+              console.error(2);
+              
+            }
+          });
+        });*/
+        //console.log(this.MyContacts.contacts);
+        
+        /*for(var i=0; i<this.MyContacts.contacts.length;i++){
+         for(var ii=0; ii<stateActive.length; ii++) {
+            if(this.MyContacts.contacts[i]._id_user === stateActive[ii]._id_user){
+              this.MyContacts.contacts[i].stateActive=true;
+            }else{
+              //contact.stateActive=false;
+            }
+          };
+        };*/
+        
+      });
     };    
   }
   

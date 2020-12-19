@@ -39,6 +39,7 @@ webSocketServer.init=(server)=>{
                             var ud=usersID.indexOf(this.id);
                             usersID.splice(ud,1)
                             console.log("delete: ", this.name);
+                            stateActive_true_false(this.id, false);
                         }, 3000); //3s
                     },
                     stopDisconnection:function(){//stop desconnection of user
@@ -78,14 +79,66 @@ webSocketServer.init=(server)=>{
             
             io.to(socket.id).emit('my-contact',mycontact);
 
+            //send state active to my contacts
+            stateActive_true_false(user._id, true);
+
 
             //console.log(mycontact);
            /* console.log( usersConeccted);
             console.log(usersID);
             console.log("usuarios: "+Object.keys(usersConeccted).length);*/
-            
         });
-        
+
+        //send my state active to my contacts
+        async function  stateActive_true_false (user_id, stateActive){ //stateActive:true || false
+            //send my myContact 
+            var mycontact=await MGmyContacts.findOne({_id_user:user_id},{"contacts":1,"_id":0});
+            
+            //send state active to my contacts
+            var StateActivedMyContacts=[];//for me
+            var StateActived=[];//for my contacts
+            var emitMessage='';
+            mycontact.contacts.forEach(function(contact, index){
+                //console.log(contact);
+                if(usersConeccted[contact._id_user]){
+                    if(index<1){//only one my data in json
+                        StateActived.push({
+                            _id_receive:user_id,//for my contacts,
+                            _id_emit:user_id,
+                            state:stateActive
+                        });
+                    };
+                    StateActivedMyContacts.push({
+                        _id_receive:contact._id_user,//for me
+                        _id_emit:user_id,
+                        state:stateActive
+                    });
+                    emitMessage.length>0?emitMessage+=`.to('${usersConeccted[contact._id_user].socketId}')`:emitMessage+=`1.to('${usersConeccted[contact._id_user].socketId}')`;
+                    //emitMessage.length>0?emitMessage+=`.to('${usersConeccted[contact._id_user].socketId}')`:emitMessage+=`1.to('${usersConeccted[contact._id_user].socketId}').to('${socket.id}')`;
+                };
+                if(mycontact.contacts.length==(index+1)){
+                    //console.log(index);
+                    emitMessage=emitMessage.replace('1.','io.');                          //send only to me
+                    emitMessage+=`.emit('state-active',${JSON.stringify(StateActived)}); socket.emit('state-active',${JSON.stringify(StateActivedMyContacts)});`;
+
+                   // socket.emit('state-active',${JSON.stringify(StateActivedMyContacts)});//send only to me
+                    
+                   
+                }
+            });
+            if(StateActived.length > 0){
+                console.log(emitMessage);
+                //console.log(mycontact.contacts.length);
+                
+                var emit={};
+                emit.send=function (){
+                    eval(emitMessage);
+                }             
+                emit.send();  //send message active to all my contacts
+               
+
+            };
+        }
         
         socket.on('user-selected',async (data)=>{//user selected on search or Mycontact
             

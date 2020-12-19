@@ -125,7 +125,7 @@ text-overflow: ellipsis;
     white-space: nowrap;/**/
     width: auto;/**/
 }
-.active-users a{
+.active-users .active-content{
     position: relative;/*este es para que el absolute de abajo se mieva junta a el y no se quede pegado*/
     display: inline-block;/**/
     margin:   8px 0;
@@ -147,7 +147,7 @@ text-overflow: ellipsis;
 
     
 }
-.active-users a span:nth-child(2){
+.active-users .active-content a span:nth-child(2){
     font-size: 0.8em;
     display: block;
     overflow: hidden;

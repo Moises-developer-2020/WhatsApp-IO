@@ -60,7 +60,7 @@ export class ChatMessageComponent implements OnInit {
     private authService:AuthServiceService) { }
 
   ngOnInit(): void {
-    this.chatService.UpdateContacts('mois');
+    //this.chatService.UpdateContacts('mois');
     if(this.authService.refreshToken()){
       this.webSocketService.listen('reponse-user-selected')//resp from user selected
       .subscribe(res=>{

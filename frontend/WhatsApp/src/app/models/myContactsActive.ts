@@ -1,12 +1,12 @@
 
-export class myContact {
+export class MyContactsActive {
     contacts:[
         
         {
             _id_user:String,
             name:String,
-            message:any,
-            stateActive:boolean
+            message:[],
+            stateActived:boolean
         }
         
     ]

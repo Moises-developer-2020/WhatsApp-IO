@@ -37,15 +37,17 @@
         <span><input type="text" name="search" placeholder="Search" autocapitalize="off"></span>
     </div>
 </div>
-<div class="active-users">
-    <a class="linkUsers ripple">
-        <span>
-            <span class="actived"></span>
-            <img src="assets/public/icon/sonreir.svg" alt="img">
-        </span>
-        <span>Moises iglesias</span>
-    </a>
-    <a class="linkUsers ripple">
+<div class="active-users" >
+    <div class="active-content ripple"  *ngFor="let ct of contactsActive.users">
+        <a class="linkUsers" (click)="UserSelected({id:ct._id_user,name:ct.name})" >
+            <span>
+                <span class="actived" *ngIf="ct.stateActive"></span>
+                <img src="assets/public/icon/sonreir.svg" alt="img">
+            </span>
+            <span>{{ct.name}}</span>
+        </a>
+    </div>
+    <!--<a class="linkUsers ripple">
         <span>
             <span class="actived"></span>
             <img src="assets/public/icon/sonreir.svg" alt="img"></span>
@@ -63,7 +65,7 @@
     <a class="linkUsers ripple">
         <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
         <span>Samael jose</span>
-    </a>
+    </a>-->
 </div>
 
 <div class="content-message-users">
@@ -76,7 +78,7 @@
 
         <div class="users-message-info ripple" (click)="UserSelected({id:ct._id_user,name:ct.name})">
             <div class="users-message-info-left">
-                <span class="users-message-infor-left-actived"></span>
+                <span *ngIf="ct.stateActive" class="users-message-infor-left-actived"></span>
                 <img src="assets/public/icon/sonreir.svg" alt="img">
             </div>
             <div class="users-message-info-center ">
