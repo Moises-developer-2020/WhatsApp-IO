@@ -126,7 +126,7 @@ webSocketServer.init=(server)=>{
                    
                 }
             });
-            if(StateActived.length > 0){
+            if(StateActivedMyContacts.length > 0){
                 console.log(emitMessage);
                 //console.log(mycontact.contacts.length);
                 
@@ -358,6 +358,7 @@ webSocketServer.init=(server)=>{
                                     contact:mycontact,
                                     emisor:message.MyId
                                 });
+                                stateActive_true_false(message.receiver, true);
                                // console.log(1.1);
                            }else{
                                 io.to(socket.id).emit('response-msm-sent',

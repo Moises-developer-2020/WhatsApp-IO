@@ -78,7 +78,9 @@
 
         <div class="users-message-info ripple" (click)="UserSelected({id:ct._id_user,name:ct.name})">
             <div class="users-message-info-left">
-                <span *ngIf="ct.stateActive" class="users-message-infor-left-actived"></span>
+                <span [class.lastTime]="ct.LastTimeActive != 0 && ct.LastTimeActive < 60" *ngIf="ct.stateActive || ct.LastTimeActive != 0 && ct.LastTimeActive < 60" class="users-message-infor-left-actived">
+                    <small *ngIf="ct.LastTimeActive != 0 && ct.LastTimeActive < 60">{{ct.LastTimeActive}} min.</small>
+                </span>
                 <img src="assets/public/icon/sonreir.svg" alt="img">
             </div>
             <div class="users-message-info-center ">
@@ -87,7 +89,7 @@
                 </div>
                 <div class="users-message-info-center-message">
                     <span class="emit" #emit>{{ct.message.send}}</span>
-                    <span *ngIf="ct.message.typeMessage" style="color: green;">Escribiendo... </span>
+                    <span *ngIf="ct.message.typeMessage" style="color: green; width: 50px;">Escribiendo... </span>
                     <span *ngIf="!ct.message.typeMessage" class="message-emit" [class.new]="!imageReceive(ct.message.send) && ct.message.cantMessageReceive != 0">
                         {{decryptMessages(ct.message.msm)}}
                     </span>

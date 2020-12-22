@@ -233,17 +233,21 @@ padding: 5px ;
 .users-message-infor-left-actived{
     text-align: center;
     background-color: green;
-    min-width: 11px;
-    min-height: 11px;
+    min-width: 10px;
+    min-height: 10px;
+    padding: 1px;
     border-radius: 40px;
     position: absolute;
     top: 41px;
     left: 40px;
     border: 1px solid black;
-    font-size: 0.7em;
+    font-size: 0.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.users-message-infor-left-actived.lastTime{
+    left: 26px;
 }
 .users-message-info-left img{
     width: 50px;

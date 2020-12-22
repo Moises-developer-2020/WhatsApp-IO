@@ -36,7 +36,11 @@ export class ChatNavLeftComponent implements OnInit {
         _id_user:"",
         name:"",
         message:[],
-        stateActive:false
+        stateActive:false,
+        time:null,
+        disconnection:null,
+        stopDisconnection:null,
+        LastTimeActive:0
       }
     ]  
   };
@@ -69,6 +73,8 @@ export class ChatNavLeftComponent implements OnInit {
         this.MyContacts.contacts.forEach(element=>{
           element.message.typeMessage=false;
           element.stateActive=false;         
+          element.LastTimeActive=0;         
+          element.time=null;         
         });
         
 
@@ -137,9 +143,19 @@ export class ChatNavLeftComponent implements OnInit {
             this.MyContacts.contacts.splice(index,1);
           }
         }
+        
+        var index_user=this.contactsActive.users.findIndex(function(element){
+          return element._id_user === res.contact._id_user;
+        });          
+        if(index_user != -1){          
+          res.contact.stateActive=this.contactsActive.users[index_user].stateActive?true:false;//mantener el estado activo del usuario
+          
+          this.contactsActive.users.splice(index_user,1);
+        }
 
        
         this.MyContacts.contacts.push(res.contact);
+        this.contactsActive.users.push(res.contact);
         /*console.log(this.MyContacts.contacts.length);
         console.log(this.MyContacts);*/
         
@@ -165,13 +181,13 @@ export class ChatNavLeftComponent implements OnInit {
          2- agregar push() nuevo json con el usuario que me envio el mensaje
          3- ejecutar la sentencia de abajo 'this.contactsActive.users.sort'
          * *************************  */
-       /* this.contactsActive.users.sort(function(a, b){
+        this.contactsActive.users.sort(function(a, b){
           //order for state active and date of message sends
           if(a.stateActive && a.message.created_at>b.message.created_at) return -1;
           if(!a.stateActive && a.message.created_at<b.message.created_at) return 1;
           if(!b.stateActive ) return -1;
           return 0;
-        });*/
+        });
         
       });
 
@@ -231,7 +247,27 @@ export class ChatNavLeftComponent implements OnInit {
           });
           if(index != -1){
            // console.log('index: '+index);
-            this.MyContacts.contacts[index].stateActive=stateActive[i].state;
+
+            this.MyContacts.contacts[index].stateActive=stateActive[i].state;//boolean
+
+            if(!stateActive[i].state){
+              this.MyContacts.contacts[index].disconnection=function(){
+                this.time=setInterval(() => {
+                  this.LastTimeActive+=1;
+                }, 60000);//every minute disconected 
+              };
+              this.MyContacts.contacts[index].disconnection();
+              
+            }else{
+              if(this.MyContacts.contacts[index].time != null){
+                this.MyContacts.contacts[index].stopDisconnection=function(){
+                  clearInterval(this.time);
+                  this.LastTimeActive=0;
+                };
+                this.MyContacts.contacts[index].stopDisconnection();
+              };
+              
+            }
           }
           //change el index from .sort in contactsActive
           //for contactsActive 
@@ -253,36 +289,7 @@ export class ChatNavLeftComponent implements OnInit {
           if(!b.stateActive ) return -1;
           return 0;
         });
-        /*this.MyContacts.contacts.forEach(contact=>{
-          stateActive.forEach(stateA => {
-            var ID="";
-            if(stateA._id_receive == this.MyID){
-              ID=stateA._id_emit;
-            }else{
-              ID=stateA._id_receive;
-            }
-            if(contact._id_user === ID){
-              contact.stateActive=true;
-              console.error(1);
-              
-            }else{
-             // contact.stateActive=true;
-              console.error(2);
-              
-            }
-          });
-        });*/
-        //console.log(this.MyContacts.contacts);
         
-        /*for(var i=0; i<this.MyContacts.contacts.length;i++){
-         for(var ii=0; ii<stateActive.length; ii++) {
-            if(this.MyContacts.contacts[i]._id_user === stateActive[ii]._id_user){
-              this.MyContacts.contacts[i].stateActive=true;
-            }else{
-              //contact.stateActive=false;
-            }
-          };
-        };*/
         
       });
     };    

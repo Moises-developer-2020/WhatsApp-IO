@@ -18,7 +18,6 @@
 </div>
 
 <div class="show-messages" #msm >
-
     <div class="welcome-to-your-chat" *ngIf="!UserSelectedResponse.myId">
         <p><strong>WELCOME</strong></p>
         <small>Selection users for view the messages</small>
@@ -37,7 +36,7 @@
     </div>
 
     <div class="showMessages" [class.show]="UserSelectedResponse.type" *ngFor="let msm of UserSelectedResponse.msm.messages.data">
-
+        
         <div class="show-messages-left" *ngIf="msm._id_user_emisor==UserSelectedResponse.msm.user._id" >
             <div class="receptorIMG"><img src="assets/public/icon/sonreir.svg" alt="img"> </div>
              <div class="content-message-left">
@@ -70,6 +69,7 @@
             <span class="typeSpan"></span>
         </div>
     </div>
+    
     <!--
     <div class="show-messages-center">
         <div class="line-center">

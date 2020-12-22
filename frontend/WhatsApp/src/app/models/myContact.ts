@@ -6,7 +6,11 @@ export class myContact {
             _id_user:String,
             name:String,
             message:any,
-            stateActive:boolean
+            stateActive:boolean,
+            time:any, // for stateActive
+            disconnection:any, // for stateActive
+            stopDisconnection:any, // for stateActive
+            LastTimeActive:number // for stateActive
         }
         
     ]
