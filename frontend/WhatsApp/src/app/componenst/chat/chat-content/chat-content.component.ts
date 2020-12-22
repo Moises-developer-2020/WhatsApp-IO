@@ -57,6 +57,7 @@ export class ChatContentComponent implements OnInit {
       var chatMain =document.querySelector('.chat-main');
       var chatContent =document.querySelector('.chat-content');
       var Allcontent =document.querySelector('.All-content');
+      var AllcontentID =document.getElementById('All-content-id');
       
       function Allcontent_Adaptable(){//adapto .All-content con el tamno del .chat-nav-top 
         //console.log(chatContent.children);
@@ -129,6 +130,14 @@ export class ChatContentComponent implements OnInit {
 
       };
       window.onload=function(){
+        windowAdaptable();
+        Allcontent_Adaptable();
+        contentMessageUsersAdaptable();
+        showMessagesAdapter();
+        searchAdaptable();
+        
+      }
+      AllcontentID.onscroll=function(){
         windowAdaptable();
         Allcontent_Adaptable();
         contentMessageUsersAdaptable();

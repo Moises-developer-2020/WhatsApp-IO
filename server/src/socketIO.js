@@ -11,6 +11,7 @@ const KeyCryptoJS="Message";
 const webSocketServer={};
 var usersConeccted={};//data the users connected
 var usersID=[];//ID of the users for deleted
+var user_disconnected=[];//User disconnection time//tiempo de desconexion del usuario 
 
 webSocketServer.init=(server)=>{
     //console.log(Object.keys(io.engine.clients));
@@ -79,6 +80,14 @@ webSocketServer.init=(server)=>{
             
             io.to(socket.id).emit('my-contact',mycontact);
 
+            //add new users to user_disconnected
+            var new_user_to_save={
+                user_id:user._id,
+                time_disconnected_connected:new Date(),
+                socket_id:socket.id
+            }
+            user_disconnected_time(new_user_to_save ,null ,null);
+
             //send state active to my contacts
             stateActive_true_false(user._id, true);
 
@@ -100,20 +109,28 @@ webSocketServer.init=(server)=>{
             var emitMessage='';
             mycontact.contacts.forEach(function(contact, index){
                 //console.log(contact);
-                if(usersConeccted[contact._id_user]){
+                var index_user=user_disconnected.findIndex(function(element){
+                    return element.user_id == contact._id_user
+                });
+                if(index_user != -1){//only users connected or time of disconnection is less to 55 minutes
+                    
                     if(index<1){//only one my data in json
+                        stateActive=usersConeccted[user_id]?true:false;
                         StateActived.push({
                             _id_receive:user_id,//for my contacts,
                             _id_emit:user_id,
-                            state:stateActive
+                            state:stateActive,
+                            time:!stateActive?user_disconnected_time(null,null,user_id):null
                         });
                     };
+                    stateActive=usersConeccted[contact._id_user]?true:false;
                     StateActivedMyContacts.push({
                         _id_receive:contact._id_user,//for me
                         _id_emit:user_id,
-                        state:stateActive
+                        state:stateActive,
+                        time:!stateActive?user_disconnected_time(null,null,contact._id_user):null//return date
                     });
-                    emitMessage.length>0?emitMessage+=`.to('${usersConeccted[contact._id_user].socketId}')`:emitMessage+=`1.to('${usersConeccted[contact._id_user].socketId}')`;
+                    emitMessage.length>0?emitMessage+=`.to('${user_disconnected[index_user].socket_id}')`:emitMessage+=`1.to('${user_disconnected[index_user].socket_id}')`;
                     //emitMessage.length>0?emitMessage+=`.to('${usersConeccted[contact._id_user].socketId}')`:emitMessage+=`1.to('${usersConeccted[contact._id_user].socketId}').to('${socket.id}')`;
                 };
                 if(mycontact.contacts.length==(index+1)){
@@ -358,7 +375,7 @@ webSocketServer.init=(server)=>{
                                     contact:mycontact,
                                     emisor:message.MyId
                                 });
-                                stateActive_true_false(message.receiver, true);
+                                //stateActive_true_false(message.receiver, true);
                                // console.log(1.1);
                            }else{
                                 io.to(socket.id).emit('response-msm-sent',
@@ -369,6 +386,7 @@ webSocketServer.init=(server)=>{
                                // console.log(1.2);
 
                            }
+                           stateActive_true_false(message.MyId, true);
 
                         }else{
                             //friend                                                    
@@ -438,7 +456,7 @@ webSocketServer.init=(server)=>{
 
                            }
                         }
-                        console.log(totalMessageSend);
+                        //console.log(totalMessageSend);
 
                     }
                 }
@@ -451,20 +469,20 @@ webSocketServer.init=(server)=>{
         });
 
         socket.on('state-message-views',async (user)=>{//estado que se envia cada ves que el usuario ve el mensaje que ha recibido
-            console.log('on');
+            //console.log('on');
                 if(usersConeccted[user.myId]){
-                    console.log('I Connected');
+                    //console.log('I Connected');
                     const userReceive= await User.findOne({_id:user.id_receive},{"_id":1,"name":1,"email":1,"image":1});//check if user exists
 
                         if(userReceive){
-                            console.log('receive');
+                           // console.log('receive');
                             if(usersConeccted[user.myId].sendMessage.user['_id'] == user.id_receive){
-                                console.log('if is user receive');
+                                //console.log('if is user receive');
                                 let imagen="assets/public/icon/sonreir.svg";                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                                 //const l=await MGMessages.updateOne({_id_user:user.myId, 'code_message._id_user_receiver':user.id_receive,'code_message.data.message.messages.read':false},{$set:{"code_message.$.image_user_receiver":"not fount","code_message.$.data":{"data.$.message":{"message.$.messages":{"messages.$.read":{"read":"true"}}}}}});
                                 const l=await MGMessages.findOne({_id_user:user.myId,'code_message._id_user_receiver':user.id_receive});
                                 if(l){
-                                    console.log('l here');
+                                   // console.log('l here');
                                     var setStateMenssage=[];
                                     setStateMenssage=l.toJSON();
                                     //console.log(setStateMenssage.code_message.length);
@@ -588,6 +606,82 @@ webSocketServer.init=(server)=>{
            // console.log(ip);
 
         });
+        //User disconnection time
+        function user_disconnected_time(newuser_id, user_disconnected_id, users_return){
+            if(newuser_id != null){
+                /*var new_user={
+                    user_id:newuser_id,
+                    time_disconnected_connected:new Date(),
+                    socket_id:
+                }*/
+                var index_user=user_disconnected.findIndex(function(element){
+                    return element.user_id == newuser_id.user_id
+                });
+                if(index_user != -1){
+                    user_disconnected.splice(index_user,1);
+
+                }
+                user_disconnected.push(newuser_id);
+
+
+            }
+            else if(user_disconnected_id != null){
+                //search index of user
+                var index_user=user_disconnected.findIndex(function(element){
+                    return element.user_id == user_disconnected_id
+                });
+                if(index_user != -1){
+                    user_disconnected[index_user].time_disconnected_connected=new Date();
+                    return user_disconnected[index_user];
+                }
+            }
+            else if(users_return != null){
+                //search index of user
+                var index_user=user_disconnected.findIndex(function(element){
+                    return element.user_id == users_return
+                });
+                if(index_user != -1){
+                    let dateNow=new Date();
+                    let timestampNow=dateNow.toLocaleTimeString('en-US');
+
+                    let dateLast=user_disconnected[index_user].time_disconnected_connected;
+                    let timestampLast=dateLast.toLocaleTimeString('en-US');
+
+                    var time_disconnected=difference_between_dates(timestampNow,timestampLast);
+                    console.log(time_disconnected);
+                    if(time_disconnected.date.hours == 0 && time_disconnected.date.minutes < 55){
+                        //only if time in minutes is less to 55 minutes of disconnected
+                        return user_disconnected[index_user].time_disconnected_connected
+                    }else{
+                        user_disconnected.splice(index_user,1);
+                    }
+                }
+            }
+            console.log(user_disconnected);
+            console.log(user_disconnected.length);
+        };
+
+        function difference_between_dates(date__now, last_date){
+            var hours1 = (date__now.substring(0,date__now.indexOf(" "))).split(":"),
+            hours2 = (last_date.substring(0,last_date.indexOf(" "))).split(":"),
+            t1 = new Date(),
+            t2 = new Date();
+
+            t1.setHours(hours1[0], hours1[1], hours1[2]);
+            t2.setHours(hours2[0], hours2[1], hours2[2]); 
+            
+            //Aquí hago la resta
+            t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
+            
+
+            return JSON.parse(`
+            {"date":{
+                "hours":${t1.getHours()},
+                "minutes":${t1.getMinutes()},
+                "seconds":${t1.getSeconds()}
+            }}
+            `);
+        };
 
         socket.on('error',(error)=>{
             console.log('error de en  socket'+error);
