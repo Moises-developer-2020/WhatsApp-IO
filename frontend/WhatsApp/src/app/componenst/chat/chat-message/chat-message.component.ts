@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from "../../../services/chat/chat.service";
 import { WebSocketService } from "../../../services/SocketIO/Web-Socket.service";
 import { UserSelected } from "../../../models/userSelected";
+import { StateActive } from "../../../models/StateActive";
 
 import * as CryptoJS from "crypto-js";
 import { DomSanitizer } from '@angular/platform-browser';
@@ -30,6 +31,23 @@ export class ChatMessageComponent implements OnInit {
    },
    myId:""
   };
+  Stete_active_user:StateActive={
+    state_active:false,
+    LastTimeActive:0,
+    time:null,
+    run_interval:function(time){
+      if(time != null){
+        this.LastTimeActive=time;
+      }
+      this.time=setInterval(()=>{
+        this.LastTimeActive+=1;
+      },60000);//every minute disconnected
+     },
+     stop_invertal:function(){
+      this.LastTimeActive=0;
+      clearInterval(this.time);
+    }
+  }
 
   Message;
   ResptypeMessage=false;
@@ -67,7 +85,28 @@ export class ChatMessageComponent implements OnInit {
         console.log('reponse-user-selected of chat-message');
         
         this.UserSelectedResponse=res as UserSelected;
-       // console.log(this.UserSelectedResponse);
+        console.log(this.UserSelectedResponse);
+        //state active of user
+        if(res.state_Active_user){//for the moment only have meesage with me 
+          this.Stete_active_user.state_active=res.state_Active_user.state_active;
+
+          if(res.state_Active_user.LastTimeActive != null){
+            if(this.Stete_active_user.time != null){
+              this.Stete_active_user.stop_invertal();
+            }
+            this.Stete_active_user.LastTimeActive=this.chatService.Date_Disconnection(res.state_Active_user.LastTimeActive).dateFormat.minutes;
+            this.Stete_active_user.run_interval(this.Stete_active_user.LastTimeActive);
+          }else{
+            if(this.Stete_active_user.time != null){
+              this.Stete_active_user.stop_invertal();
+            }
+          }
+        }else{
+          if(this.Stete_active_user.time != null){
+            this.Stete_active_user.stop_invertal();
+          }
+        }
+
         this.readAndViewMessage();
 
         setTimeout(() => {
@@ -151,7 +190,27 @@ export class ChatMessageComponent implements OnInit {
         console.log('response-state-message-views of chat-message');
 
         
-      })
+      });
+
+      //receive state_Active of the user selected
+      // "this.chatService.State_active" se ejecuta antes que el "this.webSocketService.listen('reponse-user-selected')" debo validar que "this.chatService.State_active" se ejecute al final del 'response-user-selected'
+      this.chatService.State_active
+      .subscribe(res=>{
+       // console.error(res);
+        //add data for the state active of the user selected
+        if(this.Stete_active_user.time != null){
+          this.Stete_active_user.stop_invertal();
+        }
+        this.Stete_active_user.state_active=res.state;
+        this.Stete_active_user.LastTimeActive=res.LastTimeActive;        
+        if(!res.state){
+         this.Stete_active_user.run_interval(this.Stete_active_user.LastTimeActive);
+        }else if(this.Stete_active_user.time != null){
+         
+         this.Stete_active_user.stop_invertal();
+        };
+       
+      });
 
 
     }

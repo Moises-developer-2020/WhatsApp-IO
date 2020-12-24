@@ -233,5 +233,6 @@ export class ChatContentComponent implements OnInit {
     chatMessage?chat_content_message.classList.add('show'):chat_content_message.classList.remove('show');
     
     this.ngOnInit();//para que se ejecute la adaptacion
-  }
+  };
+  
 }

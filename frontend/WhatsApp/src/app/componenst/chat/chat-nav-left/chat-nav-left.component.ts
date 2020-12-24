@@ -275,6 +275,17 @@ export class ChatNavLeftComponent implements OnInit {
               };
               
             }
+            //send state active of the users selected to chat-message.componenst
+            if(this.userSelected){
+              if(this.MyContacts.contacts[index]._id_user == this.userSelected.id){
+                var state_active={
+                  id_user:this.userSelected.id,
+                  state:stateActive[i].state,
+                  LastTimeActive:this.MyContacts.contacts[index].LastTimeActive
+                }
+                this.chatService.State_active_emit(state_active);                 
+              }
+            }
           }
           //change el index from .sort in contactsActive
           //for contactsActive 

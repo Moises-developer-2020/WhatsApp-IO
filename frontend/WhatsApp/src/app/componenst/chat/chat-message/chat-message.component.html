@@ -3,6 +3,9 @@
     <div class="usersReceptor">
         <div class="back-option">
             <img src="assets/public/icon/OptionBack.png" alt="back">
+            <span [class.State_false]="Stete_active_user.LastTimeActive != 0 && Stete_active_user.LastTimeActive < 60" *ngIf="Stete_active_user.state_active || Stete_active_user.LastTimeActive != 0 && Stete_active_user.LastTimeActive < 60" class="state_active">
+                <small *ngIf="Stete_active_user.LastTimeActive != 0 && Stete_active_user.LastTimeActive < 60">{{Stete_active_user.LastTimeActive}} min.</small>
+            </span>
         </div>
         <span><img src="assets/public/icon/sonreir.svg" alt="img"></span>
         <span class="usersReceptor-name">

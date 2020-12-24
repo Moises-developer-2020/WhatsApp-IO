@@ -167,6 +167,17 @@ webSocketServer.init=(server)=>{
                 myId:null, //just to check who sent the message//solo para verifica quien envia el mensaje
                 
             }
+            //find state active of user
+            var state_active=usersConeccted[data.id]?true:false
+            var state_Active_user={
+                state_active,
+                LastTimeActive:!state_active?user_disconnected_time(null,null,data.id):null,//return date,
+                time:null,
+                run_interval:null,
+                stop_invertal:null
+            };
+            console.log(state_Active_user);
+            
             if(usersConeccted[data.MyID]){//check if user connected
                 const user= await User.findOne({_id:data.id},{"_id":1,"name":1,"email":1,"image":1});//check if user exists
                 if(user){//if exist to user
@@ -223,7 +234,8 @@ webSocketServer.init=(server)=>{
                                         user,
                                         messages:messages.toJSON().code_message[i]
                                     },
-                                    myId:data.MyID
+                                    myId:data.MyID,
+                                    state_Active_user
                                 }
                                 //console.log(messages.toJSON().code_message[i]);
                                 break;
@@ -238,7 +250,8 @@ webSocketServer.init=(server)=>{
                                             data:[]
                                           }
                                     },
-                                    myId:data.MyID
+                                    myId:data.MyID,
+                                    
                                 }
                                 
                             }
@@ -648,13 +661,15 @@ webSocketServer.init=(server)=>{
                     let timestampLast=dateLast.toLocaleTimeString('en-US');
 
                     var time_disconnected=difference_between_dates(timestampNow,timestampLast);
-                    console.log(time_disconnected);
+                    //console.log(time_disconnected);
                     if(time_disconnected.date.hours == 0 && time_disconnected.date.minutes < 55){
                         //only if time in minutes is less to 55 minutes of disconnected
                         return user_disconnected[index_user].time_disconnected_connected
                     }else{
                         user_disconnected.splice(index_user,1);
                     }
+                }else{
+                    return null;
                 }
             }
             console.log(user_disconnected);

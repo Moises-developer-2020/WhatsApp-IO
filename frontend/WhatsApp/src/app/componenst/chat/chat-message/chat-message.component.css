@@ -7,17 +7,38 @@
     align-items: center;
     justify-content: space-between;
 }
+
+
+
+.usersReceptor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .back-option {
     margin: 0 5px;
 }
 .back-option img{
     width: 20px;
 }
+.state_active{
+    background: green;
+    min-width: 11px;
+    min-height: 11px;
+    border: 1px solid black;
+    position: absolute;
+    margin-left: 29px;
+    margin-top: 14px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+    text-align: center;
+    color: blanchedalmond;
+    font-size: 0.6rem;
+}
+.state_active.State_false{
+    margin-left: 13px;
+    padding: 0 2px;
 
-.usersReceptor{
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .usersReceptor .usersReceptor-name{
