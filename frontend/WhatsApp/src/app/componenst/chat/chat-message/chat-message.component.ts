@@ -85,7 +85,8 @@ export class ChatMessageComponent implements OnInit {
         console.log('reponse-user-selected of chat-message');
         
         this.UserSelectedResponse=res as UserSelected;
-        console.log(this.UserSelectedResponse);
+        //console.log(this.UserSelectedResponse);
+        this.chatService.User_Selected(this.UserSelectedResponse);//send user to 'chat_nac_right'
         //state active of user
         if(res.state_Active_user){//for the moment only have meesage with me 
           this.Stete_active_user.state_active=res.state_Active_user.state_active;

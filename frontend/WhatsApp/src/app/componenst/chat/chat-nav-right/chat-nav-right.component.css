@@ -1,0 +1,119 @@
+.chat_nav_right_top{
+
+}
+.chat_nav_right_top_option{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    height: 35px;
+}
+.chat_nav_right_top_option div span img{
+    width: 20px;
+    height: 20px;
+}
+.chat_nav_right_top_option div span{
+    display: block;
+    margin: 1px 0 ;
+
+}
+.chat_nav_right_top_MoreOption span{
+    background: rgb(55, 54, 54);
+    height: 5px;
+    width: 5px;
+    border-radius: 50px;
+}
+.chat_nav_right_content{
+    overflow: auto;
+}
+.chat_nav_right_top_image_perfil{
+    display: flex;
+    flex-direction: column;
+    padding: 2px;
+    align-items: center;
+    justify-content:center;
+}
+.chat_nav_right_top_image_perfil .image_perfil_conten {
+  background: rgb(197, 192, 192);
+  width: 9rem;
+  height: 9rem;  
+  border-radius: 500px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+} 
+.image_perfil_conten img{
+    width: 100%;
+    height: 100%;
+}
+.image_perfil_conten_info_user span{
+    display: block;
+    font-weight: bold;
+    text-align: center;
+}
+.image_perfil_conten_info_user span:nth-child(2){
+    font-size: small;
+}
+.chat_nav_right_top_user_option{
+    width: 100%;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.chat_nav_option_user span{
+   margin: 6px;
+   padding: 5px;
+   height: 2rem;
+   width: 2rem;
+   display: inline-block;
+   background-color: gray;
+   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+   border-radius: 50px;
+}
+.chat_nav_option_user span img{
+    width: 2rem;
+}
+
+.chat_nav_right_chat_option_user{
+    padding: 5px;
+}
+.option_chat_user{
+    display: block;
+    padding: 2px;
+}
+.chat_nav_right_chat_option{
+    display: flex;
+    align-items: center;
+    padding: 3px 0;
+    justify-content: space-between;
+}
+.chat_nav_right_chat_option span img{
+    width: 20px;
+    height: 20px;
+}
+
+.chat_nav_right_all_image{
+    padding: 5px;
+    display: block;
+}
+.nav_option_all_image{
+    margin: 10px 0;
+  
+}
+.nav_option_all_image span{
+    display: inline-block;
+    margin: 5px;
+    padding: 5px;
+    background-color: gray;
+    border-radius: 5px;
+}
+.nav_option_all_image_view span {
+    display: inline-block;
+    background: gray;
+    height: 6rem;
+    width: 6rem;
+    margin: 1px;
+    border-radius: 5px;
+}
+.nav_option_all_image_view span img{
+    width: 6rem;
+    height: 6rem;
+}

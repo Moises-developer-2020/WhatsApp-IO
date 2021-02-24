@@ -116,6 +116,16 @@ export class ChatContentComponent implements OnInit {
         
         document.querySelector('.search-User-person').setAttribute("style","height:"+totalHeight+"px");
       }
+      function Chat_nav_right_Adaptable(){
+        var nav_right_message=document.querySelector('.nav-right-message')
+        var chat_nav_right_top=document.querySelector('.chat_nav_right_top');
+        var chat_nav_right_content=document.querySelector('.chat_nav_right_content');  
+        var totalHeight=nav_right_message.clientHeight - chat_nav_right_top.clientHeight;  
+        
+        console.log(totalHeight);
+        
+        chat_nav_right_content.setAttribute("style","height:"+totalHeight+"px");
+      }
       /*-------------------------------------*/
       document.getElementById('openSearch').onclick=()=>{
         searchAdaptable();
@@ -127,15 +137,19 @@ export class ChatContentComponent implements OnInit {
         contentMessageUsersAdaptable();
         showMessagesAdapter();
         searchAdaptable();
+        Chat_nav_right_Adaptable()
 
       };
       window.onload=function(){
-        windowAdaptable();
-        Allcontent_Adaptable();
-        contentMessageUsersAdaptable();
-        showMessagesAdapter();
-        searchAdaptable();
-        
+       
+        setTimeout(() => {
+          windowAdaptable();
+          Allcontent_Adaptable();
+          contentMessageUsersAdaptable();
+          showMessagesAdapter();
+          searchAdaptable();
+          Chat_nav_right_Adaptable()
+        }, 1000);
       }
       AllcontentID.onscroll=function(){
         windowAdaptable();
@@ -143,8 +157,10 @@ export class ChatContentComponent implements OnInit {
         contentMessageUsersAdaptable();
         showMessagesAdapter();
         searchAdaptable();
+        Chat_nav_right_Adaptable()
         
       }
+      
       
       /*document.getElementById('All-content-id').onclick=function(){
         windowAdaptable;
@@ -160,6 +176,7 @@ export class ChatContentComponent implements OnInit {
       Allcontent_Adaptable();
       contentMessageUsersAdaptable();
       showMessagesAdapter();
+      Chat_nav_right_Adaptable()
       //*****************************************
       //********************  fin scrypt de adaptacion al dispositivo  ******************
 
